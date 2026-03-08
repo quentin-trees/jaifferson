@@ -28,6 +28,17 @@ const Index = () => {
         topic: formData.topic || null,
       });
       if (error) throw error;
+
+      // Send confirmation email (non-blocking)
+      supabase.functions.invoke("send-waitlist-email", {
+        body: {
+          firstName: formData.firstName,
+          email: formData.email,
+          intent: formData.intent,
+          lang: locale,
+        },
+      }).catch((err) => console.error("Email send failed:", err));
+
       setSubmitted(true);
     } catch {
       alert(t.form.error);
