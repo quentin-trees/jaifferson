@@ -51,7 +51,7 @@ export const translations = {
       text: "\u201CMost meetings are broken. Jaifferson is a new way of doing them.\u201D",
       source: "— Quentin Cloarec, founder",
     },
-    footer: { right: "Built by Trees Engineering · Kuala Lumpur" },
+    footer: { right: "by Quentin Cloarec" },
   },
 
   fr: {
@@ -104,7 +104,7 @@ export const translations = {
       text: "« La plupart des réunions sont cassées. Jaifferson est une nouvelle façon de les faire. »",
       source: "— Quentin Cloarec, fondateur",
     },
-    footer: { right: "Conçu par Trees Engineering · Kuala Lumpur" },
+    footer: { right: "par Quentin Cloarec" },
   },
 
   es: {
@@ -157,6 +157,6 @@ export const translations = {
       text: "«La mayoría de las reuniones están rotas. Jaifferson es una nueva forma de hacerlas.»",
       source: "— Quentin Cloarec, fundador",
     },
-    footer: { right: "Creado por Trees Engineering · Kuala Lumpur" },
+    footer: { right: "por Quentin Cloarec" },
   },
 };
