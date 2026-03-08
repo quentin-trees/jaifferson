@@ -48,7 +48,7 @@ export const translations = {
       ],
     },
     quote: {
-      text: ""Most meetings are broken. Jaifferson is a new way of doing them."",
+      text: "\u201CMost meetings are broken. Jaifferson is a new way of doing them.\u201D",
       source: "— Quentin Cloarec, founder",
     },
     footer: { right: "Built by Trees Engineering · Kuala Lumpur" },
