@@ -159,4 +159,4 @@ export const translations = {
     },
     footer: { right: "Creado por Trees Engineering · Kuala Lumpur" },
   },
-} as const;
+};

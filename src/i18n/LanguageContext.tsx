@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { translations, type Locale } from "./translations";
 
-type TranslationType = typeof translations.en;
+type TranslationType = (typeof translations)[Locale];
 
 interface LanguageContextType {
   locale: Locale;
