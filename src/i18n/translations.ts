@@ -104,7 +104,7 @@ export const translations = {
       text: "« La plupart des réunions sont cassées. Jaifferson est une nouvelle façon de les faire. »",
       source: "— Quentin Cloarec, fondateur",
     },
-    footer: { right: "Conçu par Trees Engineering · Kuala Lumpur" },
+    footer: { right: "par Quentin Cloarec" },
   },
 
   es: {
