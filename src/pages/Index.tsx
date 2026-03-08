@@ -5,7 +5,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [formData, setFormData] = useState({
     firstName: "",
     email: "",
