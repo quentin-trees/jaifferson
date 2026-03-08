@@ -203,7 +203,9 @@ const Index = () => {
       {/* FOOTER */}
       <footer className="border-t border-border px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-2 text-[13px] text-muted-foreground">
         <span>Jaifferson</span>
-        <span>{t.footer.right}</span>
+        <a href="https://www.linkedin.com/in/quentincloarec/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+          {t.footer.right}
+        </a>
       </footer>
     </div>
   );
