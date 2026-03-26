@@ -151,7 +151,7 @@ const Create = () => {
     }
     setStep("visibility");
     addJaiffersonMessage(
-      "Should this session be public — visible in the Explore directory — or private, accessible only via a link you share?\n\nType "public" or "private"."
+      'Should this session be public — visible in the Explore directory — or private, accessible only via a link you share?\n\nType "public" or "private".'
     );
   };
 
