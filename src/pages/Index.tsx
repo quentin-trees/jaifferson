@@ -1,51 +1,10 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 import Logo from "@/components/Logo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Index = () => {
-  const { t, locale } = useLanguage();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    email: "",
-    intent: "",
-    topic: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.firstName || !formData.email || !formData.intent) return;
-
-    setLoading(true);
-    try {
-      const { error } = await supabase.from("waitlist_signups").insert({
-        first_name: formData.firstName,
-        email: formData.email,
-        intent: formData.intent,
-        topic: formData.topic || null,
-      });
-      if (error) throw error;
-
-      // Send confirmation email (non-blocking)
-      supabase.functions.invoke("send-waitlist-email", {
-        body: {
-          firstName: formData.firstName,
-          email: formData.email,
-          intent: formData.intent,
-          lang: locale,
-        },
-      }).catch((err) => console.error("Email send failed:", err));
-
-      setSubmitted(true);
-    } catch {
-      alert(t.form.error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -54,12 +13,12 @@ const Index = () => {
         <Logo />
         <div className="flex items-center gap-6">
           <LanguageSwitcher />
-          <a
-            href="#waitlist"
+          <Link
+            to="/session"
             className="bg-primary text-primary-foreground text-[13px] font-medium tracking-widest uppercase px-6 py-2.5 hover:bg-primary/90 transition-colors"
           >
             {t.nav.cta}
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -76,108 +35,12 @@ const Index = () => {
         <p className="text-[17px] leading-[1.75] text-muted-foreground max-w-[560px] mb-12">
           {t.hero.desc}
         </p>
-      </section>
-
-      {/* WAITLIST FORM */}
-      <section id="waitlist" className="px-6 pb-24">
-        <div className="bg-card border border-border p-8 md:p-12 max-w-[520px] mx-auto">
-          {!submitted ? (
-            <>
-              <h2 className="font-serif text-[22px] mb-2">{t.form.heading}</h2>
-              <p className="text-sm text-muted-foreground mb-8 leading-relaxed">
-                {t.form.sub}
-              </p>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-xs font-medium tracking-widest uppercase text-foreground mb-2">
-                    {t.form.firstName}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full px-4 py-3 border border-input bg-background text-foreground text-sm outline-none focus:border-primary transition-colors"
-                    placeholder={t.form.firstNamePlaceholder}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium tracking-widest uppercase text-foreground mb-2">
-                    {t.form.email}
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-input bg-background text-foreground text-sm outline-none focus:border-primary transition-colors"
-                    placeholder={t.form.emailPlaceholder}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium tracking-widest uppercase text-foreground mb-2">
-                    {t.form.intentLabel}
-                  </label>
-                  <div className="flex gap-3">
-                    {(["host", "join"] as const).map((option) => (
-                      <label
-                        key={option}
-                        className={`flex-1 flex items-center justify-center px-4 py-3 border cursor-pointer text-[13px] tracking-wide transition-all ${
-                          formData.intent === option
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "border-input bg-background hover:border-muted-foreground"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="intent"
-                          value={option}
-                          checked={formData.intent === option}
-                          onChange={(e) => setFormData({ ...formData, intent: e.target.value })}
-                          className="sr-only"
-                        />
-                        {option === "host" ? t.form.host : t.form.join}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium tracking-widest uppercase text-foreground mb-2">
-                    {t.form.topicLabel}
-                  </label>
-                  <textarea
-                    value={formData.topic}
-                    onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
-                    className="w-full px-4 py-3 border border-input bg-background text-foreground text-sm outline-none focus:border-primary transition-colors resize-none h-[90px]"
-                    placeholder={t.form.topicPlaceholder}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-primary text-primary-foreground py-4 text-[13px] font-medium tracking-[0.12em] uppercase hover:bg-primary/90 transition-colors disabled:opacity-50"
-                >
-                  {loading ? t.form.submitting : t.form.submit}
-                </button>
-
-                <p className="text-xs text-muted-foreground text-center mt-4">
-                  {t.form.note}
-                </p>
-              </form>
-            </>
-          ) : (
-            <div className="text-center py-10">
-              <h3 className="font-serif text-2xl mb-3">{t.form.successTitle}</h3>
-              <p className="text-[15px] text-muted-foreground leading-relaxed whitespace-pre-line">
-                {t.form.successDesc}
-              </p>
-            </div>
-          )}
-        </div>
+        <Link
+          to="/session"
+          className="bg-primary text-primary-foreground text-[13px] font-medium tracking-[0.15em] uppercase px-10 py-4 hover:bg-primary/90 transition-colors"
+        >
+          {t.hero.cta} →
+        </Link>
       </section>
 
       {/* HOW IT WORKS */}
