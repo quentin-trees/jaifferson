@@ -89,29 +89,29 @@ const Story = () => {
           </div>
         </section>
 
-        {/* --- Section: The Festin --- */}
+        {/* --- Section: The dinners --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
-            The Festin
+            The dinners
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              In early 2026, Quentin was connected to a dinner in Paris. Carlos — a founder, an operator, someone with deep roots in the French tech ecosystem — had gathered seven people around a table. He called it a Festin. No agenda. No slides. No moderator. Just people who had built things, failed at things, and were willing to talk honestly about what they had learned.
+              It started in 2023. Quentin began hosting dinners at his place — small tables, four to six people, organised around a specific topic. Not networking events. Not social gatherings. Curated conversations with people carefully chosen because he knew they would bring ideas and vision to the table.
             </p>
             <p>
-              The transcript of that evening ran to 15,708 words. It contained exits worth 150 million euros, companies built in exile, questions about what it means to build French companies in a world that does not reward French companies. It contained moments of real honesty — the kind that rarely survive a networking event.
+              The format worked. People who would never have met each other sat across from each other and said things they had not said before. The conversations were real. The problem was what happened after: the intelligence produced at those tables did not survive the evening.
             </p>
             <p>
-              Quentin read the transcript. Then he read it again.
-            </p>
-            <p>
-              The intelligence was all there. The patterns were visible. The connections between what different people had said — the themes that nobody had named explicitly but that ran through every conversation — were clear to anyone willing to read carefully.
+              In parallel, Quentin was having dozens of one-to-one conversations online about AI — with founders, operators, researchers, people building in different corners of the same landscape. Each conversation was valuable on its own. But the connections between them — the patterns, the contradictions, the complementary views — were invisible because every conversation was isolated.
             </p>
             <p className="text-foreground font-medium">
-              But nobody had read carefully. They had been in the room. They had trusted their memory. And now most of what happened was gone.
+              The idea was simple: what if he connected all of them together?
             </p>
             <p>
-              That evening became Festin 00. The first test case. The proof that the problem was real and that something could be done about it.
+              The online Jaifferson was born from that instinct. Not a webinar. Not a panel. A structured conversation between people who had been thinking about the same problems separately — brought together so the room could produce something none of them could produce alone.
+            </p>
+            <p>
+              That first online session became the proof that the format worked beyond a physical table. And it raised a harder question: all this intelligence was being produced — but who was capturing it? Who was reading it? Who was making it compound?
             </p>
           </div>
         </section>
