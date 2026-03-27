@@ -96,7 +96,7 @@ const Create = () => {
 
   useEffect(() => {
     addJaiffersonMessage(
-      "Welcome to Jaifferson. I'll help you create a session — a curated conversation around a topic that matters to you.\n\nLet's start. What's your email address?"
+      "I'm Jaifferson. You want to host a session — a curated conversation around something that actually matters to you.\n\nI'll need a few things. We'll move fast.\n\nFirst: your email."
     );
     setStep("email");
   }, []);
@@ -164,13 +164,13 @@ const Create = () => {
   const handleEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      addJaiffersonMessage("That doesn't look like a valid email. Could you try again?");
+      addJaiffersonMessage("That's not an email. Try again.");
       return;
     }
     setEmail(value);
     setStep("topic");
     addJaiffersonMessage(
-      `Got it, ${value.split("@")[0]}. Now — what's the topic you want to explore with your group?\n\nDescribe it in your own words. It can be rough — I'll help you refine it.`
+      "Good.\n\nNow — what do you want the room to talk about?\n\nDon't polish it. Say it the way you'd say it to someone you trust."
     );
   };
 
@@ -180,7 +180,7 @@ const Create = () => {
     setTopicRefined(refined);
     setStep("confirm_topic");
     addJaiffersonMessage(
-      `Here's how I'd frame that for your session:\n\n"${refined}"\n\nDoes that work for you? Type "yes" to confirm, or rephrase it and I'll use your version.`
+      `Here's how I'd frame it:\n\n"${refined}"\n\nIf that works, say yes. If not, give me the version you actually want.`
     );
   };
 
@@ -191,7 +191,7 @@ const Create = () => {
     }
     setStep("visibility");
     addJaiffersonMessage(
-      "Should this session be public or private?",
+      "Public or private?",
       [
         { label: "Public", value: "public", icon: <Globe className="h-4 w-4" /> },
         { label: "Private", value: "private", icon: <Lock className="h-4 w-4" /> },
@@ -205,8 +205,8 @@ const Create = () => {
     setStep("max_participants");
     addJaiffersonMessage(
       pub
-        ? "Public — anyone can discover and apply.\n\nHow many seats at the table?"
-        : "Private — only people with your link will see it.\n\nHow many seats at the table?",
+        ? "Public. Anyone can find it and apply.\n\nHow many seats?"
+        : "Private. Invite-only.\n\nHow many seats?",
       SEAT_OPTIONS
     );
   };
@@ -214,7 +214,7 @@ const Create = () => {
   const handleMaxParticipantsChoice = (value: string) => {
     setMaxParticipants(parseInt(value));
     setStep("date");
-    addJaiffersonMessage("When should this happen? Pick a date.");
+    addJaiffersonMessage("When?");
   };
 
   const handleDateSelect = (date: Date | undefined) => {
@@ -235,13 +235,13 @@ const Create = () => {
     }
     setStep("questions_review");
     addJaiffersonMessage(
-      `Perfect.\n\nNow, here are 3 onboarding questions that applicants will answer:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nType "ok" to keep them, or type your own questions (one per line).`
+      `Last thing. Every applicant will answer three questions before they get a seat. Here are the defaults:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nKeep them or replace them. Your call.`
     );
   };
 
   const handleQuestionsReview = (value: string) => {
     const lower = value.toLowerCase().trim();
-    if (lower !== "ok" && lower !== "oui" && lower !== "yes") {
+    if (lower !== "ok" && lower !== "oui" && lower !== "yes" && lower !== "keep" && lower !== "garder") {
       const lines = value.split("\n").filter((l) => l.trim());
       if (lines.length >= 1) {
         setQuestions(lines.slice(0, 3));
@@ -250,10 +250,10 @@ const Create = () => {
     setStep("review");
 
     const dateStr = scheduledAt
-      ? format(new Date(scheduledAt), "EEEE, MMMM d, yyyy 'at' HH:mm")
+      ? format(new Date(scheduledAt), "EEEE, MMMM d 'at' HH:mm")
       : "TBD";
 
-    const summary = `Here's your Jaifferson:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public" : "Private"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Questions:** ${questions.length}`;
+    const summary = `Here's what we have:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public" : "Private"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Questions:** ${questions.length}\n\nIf this is right, publish it.`;
 
     addJaiffersonMessage(summary, [
       { label: "Publish", value: "publish" },
@@ -263,7 +263,7 @@ const Create = () => {
   const handleReview = async (value: string) => {
     const lower = value.toLowerCase().trim();
     if (lower !== "publish" && lower !== "publier" && lower !== "publicar" && lower !== "go") {
-      addJaiffersonMessage('Tell me what you\'d like to change, or click Publish when ready.', [
+      addJaiffersonMessage("Tell me what to change. Or publish.", [
         { label: "Publish", value: "publish" },
       ]);
       return;
@@ -294,16 +294,16 @@ const Create = () => {
       setSessionId(data?.session_id);
       setStep("done");
       addJaiffersonMessage(
-        `Your Jaifferson is live.\n\nI've sent a magic link to ${email} — click it to access your host dashboard.\n\nShare the session link with potential participants. They'll be able to see your topic and apply.\n\nGood luck with your session.`
+        `Done. Your session is live.\n\nA magic link has been sent to ${email}. Use it to access your host dashboard.\n\nShare the session link with the people you want in the room. They'll see the topic, answer your questions, and wait for your decision.\n\nThe room is set. Now fill it with the right people.`
       );
     } catch (err: any) {
       console.error("Error creating session:", err);
       setStep("review");
       addJaiffersonMessage(
-        'Something went wrong. Let\'s try again.',
+        "Something broke. Let's try again.",
         [{ label: "Publish", value: "publish" }]
       );
-      toast.error("Failed to create session. Please try again.");
+      toast.error("Failed to create session.");
     } finally {
       setIsPublishing(false);
     }
