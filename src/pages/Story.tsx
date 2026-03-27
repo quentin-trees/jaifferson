@@ -242,10 +242,16 @@ const Story = () => {
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              Jaifferson is not an acronym. It is not named after a person. It is a constructed name — firm enough to carry authority, unusual enough to be unambiguous, precise enough to sound like something that means exactly what it does.
+              The format is inspired by the <span className="text-foreground font-medium">Jeffersonian Dinner</span> — a small, hosted meal built around one meaningful group conversation, usually 8 to 14 people, guided by a single topic and a moderator who keeps the discussion deep, not wide. No small talk. No networking. Just one shared question, explored seriously.
             </p>
             <p>
-              It is the kind of name that a Curator-Strategist would choose: memorable without being clever, distinctive without being noisy.
+              The name Jaifferson is a deliberate mutation. The "J'ai" — French for "I have" — replaces the "Je" of Jefferson. It carries intention: <em>I have something to bring to the table.</em> The rest sounds familiar enough to evoke the tradition, but different enough to be its own thing.
+            </p>
+            <p>
+              It is not an acronym. It is not named after a person. It is a constructed name — firm enough to carry authority, unusual enough to be unambiguous, precise enough to sound like something that means exactly what it does.
+            </p>
+            <p>
+              The kind of name a Curator-Strategist would choose: memorable without being clever, distinctive without being noisy.
             </p>
           </div>
         </section>
