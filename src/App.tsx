@@ -13,6 +13,7 @@ import Session from "./pages/Session";
 import Onboard from "./pages/Onboard";
 import Admin from "./pages/Admin";
 import Story from "./pages/Story";
+import Festin from "./pages/Festin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/onboard" element={<Onboard />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/story" element={<Story />} />
+            <Route path="/festin" element={<Festin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

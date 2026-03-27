@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { ArrowRight } from "lucide-react";
 
 const ShowcaseSection = () => {
   const { t } = useLanguage();
@@ -15,7 +17,7 @@ const ShowcaseSection = () => {
         <p className="text-[15px] leading-relaxed opacity-75 max-w-[560px] mx-auto mb-12">
           {t.showcase.desc}
         </p>
-        <div className="flex justify-center gap-12 md:gap-20">
+        <div className="flex justify-center gap-12 md:gap-20 mb-12">
           {t.showcase.stats.map((stat, i) => (
             <div key={i} className="text-center">
               <p className="font-serif text-4xl md:text-5xl mb-2 opacity-90">
@@ -27,6 +29,13 @@ const ShowcaseSection = () => {
             </div>
           ))}
         </div>
+        <Link
+          to="/festin"
+          className="inline-flex items-center gap-2 border border-primary-foreground/30 text-primary-foreground text-[13px] font-medium tracking-[0.12em] uppercase px-8 py-4 hover:bg-primary-foreground hover:text-primary transition-colors"
+        >
+          Voir le Festin 00
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );
