@@ -18,6 +18,12 @@ const Index = () => {
         <Logo />
         <div className="flex items-center gap-6">
           <Link
+            to="/story"
+            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+          >
+            Story
+          </Link>
+          <Link
             to="/explore"
             className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
           >
