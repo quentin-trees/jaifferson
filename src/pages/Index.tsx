@@ -202,8 +202,8 @@ const Index = () => {
               {[
                 {
                   n: "01",
-                  en: { title: "Create your Festin", desc: "Set the topic, choose public or private, define the number of participants and the onboarding questions Jaifferson will send to applicants." },
-                  fr: { title: "Créez votre Festin", desc: "Définissez le sujet, choisissez public ou privé, le nombre de participants et les questions d'onboarding que Jaifferson enverra aux candidats." },
+                  en: { title: "Create your Jaifferson", desc: "Set the topic, choose public or private, define the number of participants and the onboarding questions Jaifferson will send to applicants." },
+                  fr: { title: "Créez votre Jaifferson", desc: "Définissez le sujet, choisissez public ou privé, le nombre de participants et les questions d'onboarding que Jaifferson enverra aux candidats." },
                 },
                 {
                   n: "02",
