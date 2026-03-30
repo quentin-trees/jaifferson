@@ -241,7 +241,7 @@ const Create = () => {
     }
     setStep("questions_review");
     addJaiffersonMessage(
-      `Last thing. Every applicant will answer three questions before they get a seat. Here are the defaults:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nKeep them or replace them. Your call.`
+      `Almost there. This is the part most hosts underestimate.\n\nEvery applicant will answer three questions before they get a seat. These aren't just screening — they're preparation. The right questions make people think before they arrive, and that's what separates a good conversation from a great one.\n\nHere are the ones I'd use:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nThese are designed to surface intent, vulnerability, and curiosity — the three things that make a Jaifferson session work.\n\nKeep them as-is, or write your own (one per line). Your call.`
     );
   };
 
