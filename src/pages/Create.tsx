@@ -228,7 +228,7 @@ const Create = () => {
     setSelectedDate(date);
     addUserMessage(format(date, "EEEE, MMMM d, yyyy"));
     setStep("time");
-    addJaiffersonMessage("What time?", TIME_OPTIONS);
+    addJaiffersonMessage("Good. What time?\n\nEvening tends to work best — people are out of work mode and more willing to be honest. But you know your audience.", TIME_OPTIONS);
   };
 
   const handleTimeChoice = (time: string) => {
