@@ -300,7 +300,7 @@ const Create = () => {
       setSessionId(data?.session_id);
       setStep("done");
       addJaiffersonMessage(
-        `Done. Your session is live.\n\nA magic link has been sent to ${email}. Use it to access your host dashboard.\n\nShare the session link with the people you want in the room. They'll see the topic, answer your questions, and wait for your decision.\n\nThe room is set. Now fill it with the right people.`
+        `It's live.\n\nI've sent a magic link to **${email}** — use it to access your host dashboard where you'll review applications and manage the room.\n\nHere's what happens next:\n\n1. Share your session link with the people you want in the room\n2. They'll read the topic, answer your three questions, and apply\n3. You review each application and decide who gets a seat\n4. Accepted participants receive their confirmation\n\nThe conversation doesn't start when people sit down. It starts when they read your questions and decide this room is worth their time.\n\nThe room is set. Now fill it with the right people.`
       );
     } catch (err: any) {
       console.error("Error creating session:", err);
