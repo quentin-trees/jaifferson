@@ -351,10 +351,12 @@ const Index = () => {
             return (
               <div
                 key={f.id}
-                className={`border border-border p-7 flex flex-col gap-5 group ${
-                  f.status !== "past" ? "cursor-pointer hover:border-foreground/40 transition-colors" : ""
-                }`}
-                onClick={() => f.status !== "past" && navigate(`/festin/${f.id}`)}
+                className={`border border-border p-7 flex flex-col gap-5 group cursor-pointer hover:border-foreground/40 transition-colors`}
+                onClick={() => {
+                  if (f.id === "festin-00") navigate("/festin");
+                  else if (f.status === "open") navigate("/create");
+                  else navigate(`/explore`);
+                }}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3">
