@@ -257,7 +257,7 @@ const Dashboard = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           {app.status === "pending" && <Clock className="w-4 h-4 text-gold" />}
-                          {app.status === "accepted" && <CheckCircle className="w-4 h-4 text-green-600" />}
+                          {app.status === "accepted" && <CheckCircle className="w-4 h-4 text-gold" />}
                           {app.status === "declined" && <XCircle className="w-4 h-4 text-destructive" />}
                           <span className="text-[12px] uppercase tracking-wider text-muted-foreground capitalize">
                             {app.status}
