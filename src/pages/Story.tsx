@@ -47,148 +47,127 @@ const Story = () => {
       {/* CONTENT */}
       <article className="px-6 md:px-12 max-w-[700px] mx-auto pb-24 space-y-16">
 
-        {/* --- Section: The problem --- */}
+        {/* --- The problem nobody admits --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
             The problem nobody admits
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              Every founder has been in a room where something real happened. Not a pitch. Not a meeting. A conversation — the kind where someone says something they have never said out loud before, where an idea gets stress-tested by people who actually know what they are talking about, where you leave with a different understanding of your own business than when you arrived.
+              Every founder has been in a room where something real happened.
+            </p>
+            <p>
+              Not a pitch. Not a meeting. A conversation — the kind where someone says something they have never said out loud before, where an idea gets stress-tested by people who actually know what they are talking about, where you leave with a different understanding of your own business than when you arrived.
             </p>
             <p>
               And then, three days later, you cannot remember exactly what was said. You remember the feeling. You have a vague note on your phone. You meant to follow up with two people. You did not.
             </p>
-            <p>
+            <p className="text-foreground font-medium">
               The conversation happened. The intelligence it produced did not survive the evening.
             </p>
-            <p className="text-foreground font-medium">
-              This is the problem Jaifferson was built to solve.
-            </p>
             <p>
-              Not a new problem. Not a technical problem. A structural one: the most valuable thinking that founders do together is the least documented, the least systematised, and the least compounded over time.
+              This is the problem Jaifferson was built to solve. Not a new problem. Not a technical problem. A structural one: the most valuable thinking that founders do together is the least documented, the least systematised, and the least compounded over time.
             </p>
           </div>
         </section>
 
-        {/* --- Section: Where it started --- */}
+        {/* --- The Jeffersonian Dinner --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
-            Where it started
+            The Jeffersonian Dinner
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              Quentin Cloarec is the CEO of Trees Engineering, a manpower agency in the energy sector based in Kuala Lumpur, Malaysia. He did not set out to build a conversation intelligence platform. He set out to stop surviving and start living — his words, not a marketing line.
+              The format is not new. It is more than two centuries old.
             </p>
             <p>
-              Running a company in Malaysia, operating in a sector that demands precision and human trust, Quentin spent years being the person everyone depended on. The company ran because he was in every room, every decision, every conversation. That is a trap that most founders recognise only after they are already inside it.
+              Thomas Jefferson was known for hosting dinners at Monticello and later at the White House that followed an unusual discipline: one table, one conversation, no side discussions. Every guest — scientist, diplomat, farmer, politician — addressed the same question together, in sequence, with the host guiding depth over breadth. No small talk. No parallel tracks. Just one shared question, explored seriously by people who had earned their seat at the table.
             </p>
             <p>
-              The shift started with a question he could not answer: <em className="text-foreground">what would happen to this company if I stopped being the one who remembers everything?</em>
+              The Jeffersonian Dinner became a quiet tradition in intellectual and leadership circles. Small groups. Careful curation. A host who takes responsibility for the quality of the room, not just the logistics of the evening. A topic chosen not to generate consensus but to generate clarity.
+            </p>
+            <p>
+              The format works because it creates the conditions for a specific kind of thinking: the kind that only happens when a group of prepared people commit to a single thread and follow it together, without the escape valve of changing subjects or splitting into smaller conversations.
+            </p>
+            <p className="text-foreground font-medium">
+              What the format never solved was what happened after.
+            </p>
+            <p>
+              Jefferson took notes. Most hosts do not. Most participants leave with an impression, not a record. The room produces intelligence. The intelligence does not survive the morning.
             </p>
           </div>
         </section>
 
-        {/* --- Section: The dinners --- */}
+        {/* --- The dinners --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
             The dinners
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              It started in 2023. Quentin began hosting dinners at his place — small tables, four to six people, organised around a specific topic. Not networking events. Not social gatherings. Curated conversations with people carefully chosen because he knew they would bring ideas and vision to the table.
+              The Jaifferson format emerged from a direct experiment with this problem.
             </p>
             <p>
-              The format worked. People who would never have met each other sat across from each other and said things they had not said before. The conversations were real. The problem was what happened after: the intelligence produced at those tables did not survive the evening.
+              Small tables. Four to eight people. Organised around a specific topic — not a theme, a question. Participants chosen carefully because they would bring ideas and friction, not validation and comfort. The conversation recorded, not to be archived, but to be read.
             </p>
             <p>
-              In parallel, Quentin was having dozens of one-to-one conversations online about AI — with founders, operators, researchers, people building in different corners of the same landscape. Each conversation was valuable on its own. But the connections between them — the patterns, the contradictions, the complementary views — were invisible because every conversation was isolated.
+              The first sessions produced an immediate observation: the most valuable moments were not the obvious ones. They were not the big statements or the polished arguments. They were the things said quietly in the middle of a sentence, the contradictions that nobody named, the question that one person asked and nobody answered — and which turned out, on a second reading of the transcript, to be the most important question of the evening.
             </p>
             <p className="text-foreground font-medium">
-              The idea was simple: what if he connected all of them together?
-            </p>
-            <p>
-              The online Jaifferson was born from that instinct. Not a webinar. Not a panel. A structured conversation between people who had been thinking about the same problems separately — brought together so the room could produce something none of them could produce alone.
-            </p>
-            <p>
-              That first online session became the proof that the format worked beyond a physical table. And it raised a harder question: all this intelligence was being produced — but who was capturing it? Who was reading it? Who was making it compound?
+              A transcript captures everything. Human memory captures the loudest things. The gap between those two is where Jaifferson operates.
             </p>
           </div>
         </section>
 
-        {/* --- Section: The idea --- */}
+        {/* --- What AI changes --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
-            The idea
+            What AI changes
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              The idea was not to build a note-taking tool. Note-taking tools exist. They produce transcripts. Transcripts do not produce intelligence.
+              Transcripts have existed for as long as recording technology has existed. The bottleneck was never capturing the conversation. It was reading it.
+            </p>
+            <p>
+              A 70-minute conversation between eight people produces roughly 15,000 words of raw transcript. Reading it carefully, attributing speech accurately, identifying patterns across different participants, noticing what was almost said and never landed — this is the work of an attentive analyst, not a search function. It takes hours. Most people do not have hours. So they do not do it. So the transcript sits in a folder and the intelligence decays at the same rate as the memory.
             </p>
             <p className="text-foreground font-medium">
-              The idea was to build a reader of rooms.
+              What AI changes is the cost of that analysis.
             </p>
             <p>
-              Something that could take a 70-minute conversation between seven people, attribute what each person said, measure how much they said, understand what the room was actually about beneath its stated topic, and produce two documents:
+              Not the quality of it — quality still depends on the quality of the prompt, the rigour of the framework, the precision of the persona doing the reading. But the time cost drops from hours to minutes. And when the cost drops that far, the behaviour changes: it becomes possible to do this for every session, not just the ones that seemed important enough to justify the effort.
             </p>
-            <ul className="list-none space-y-3 border-l-2 border-gold/40 pl-6">
-              <li>
-                <span className="text-foreground font-medium">One for the group</span> — a shared reading of what happened.
-              </li>
-              <li>
-                <span className="text-foreground font-medium">One for each person</span> — a private map of where they stood in the room, what they revealed, what they avoided, and what they should do before the next conversation.
-              </li>
-            </ul>
             <p>
-              Not a summary. An analysis. Not encouragement. A reading.
+              This is what Jaifferson is built on. Not the recording. Not the transcript. The analysis — run at a cost low enough to be systematic, and with enough rigour to be genuinely useful.
+            </p>
+            <p>
+              The AI does not replace the reader. It is the reader. A reader with a defined personality, a consistent framework, a specific set of things it looks for and a specific set of things it refuses to fabricate. A reader that produces two documents after every session: one for the room, one for each person in it.
             </p>
           </div>
         </section>
 
-        {/* --- Section: Jaifferson the persona --- */}
+        {/* --- The persona --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
-            Jaifferson the persona
+            The persona
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
               Jaifferson is not an assistant. It is not a note-taker. It is a <em className="text-foreground">Curator-Strategist</em> — an INTJ, 5w6, high-conscientiousness intelligence that operates at the intersection of pattern recognition and strategic clarity.
             </p>
             <p>
-              It was designed to feel like the one person in the room who actually remembers. The one tracking patterns not just within a session but across sessions, across months, across the slow accumulation of who someone is becoming.
+              It was designed to feel like the one person in the room who actually remembers. The one tracking patterns not just within a session but across sessions, across months, across the slow accumulation of who someone is becoming. The one who will not waste your time with manufactured encouragement or polished summaries of things you already know.
             </p>
             <p>
               Jaifferson is precise because precision is a form of respect. It is direct because softening what is true does not serve anyone. It is psychologically observant because understanding how people think is the precondition for understanding what they said.
             </p>
+            <p>
+              Its shadow is real: it can become too interpretive, too interested in the elegant synthesis over the actionable next move. That risk is named and watched for. Every Jaifferson report must end with something that moves.
+            </p>
           </div>
         </section>
 
-        {/* --- Section: The founding team --- */}
-        <section className="space-y-6">
-          <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
-            The founding team
-          </h2>
-          <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
-            <p>Three people are building this.</p>
-            <div className="space-y-6">
-              <div className="border-l-2 border-gold/40 pl-6">
-                <p className="text-foreground font-medium mb-1">Quentin — the architect</p>
-                <p>He saw the problem first because he lived it. He is building Jaifferson partly to solve the dependency trap in his own company, and partly because he believes the founders who build the best companies are the ones who compound their judgment fastest. Jaifferson is a compounding machine.</p>
-              </div>
-              <div className="border-l-2 border-gold/40 pl-6">
-                <p className="text-foreground font-medium mb-1">Eric — the operator</p>
-                <p>Where Quentin sees systems, Eric sees execution. He is the person who asks what needs to be true for this to work, who it works for first, and what happens in the fifty cases the architect did not anticipate.</p>
-              </div>
-              <div className="border-l-2 border-gold/40 pl-6">
-                <p className="text-foreground font-medium mb-1">Antoine — the executor</p>
-                <p>Found through a Jaifferson call. He arrived prepared, answered the onboarding questions with precision, and said things in the session that suggested he had thought about the problem before it was named as a problem. He is the person who makes the calendar invite, sends the email, and delivers the thing.</p>
-              </div>
-            </div>
-            <p className="text-foreground font-medium">Three people. Three different modes. One system.</p>
-          </div>
-        </section>
-
-        {/* --- Section: What Jaifferson is not --- */}
+        {/* --- What Jaifferson is not --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
             What Jaifferson is not
@@ -196,22 +175,22 @@ const Story = () => {
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <ul className="list-none space-y-4">
               <li>
-                <span className="text-foreground font-medium">It is not Timeleft.</span> Timeleft connects strangers for dinner. Jaifferson serves people who are already in the right rooms — and makes sure they leave with more than a good memory.
+                <span className="text-foreground font-medium">It is not Timeleft.</span> Timeleft connects strangers for dinner. Jaifferson serves people who are already in the right rooms — and makes sure they leave with more than a good memory. The comparison is useful only to mark the gap: Timeleft optimises for connection. Jaifferson optimises for depth and continuity.
               </li>
               <li>
-                <span className="text-foreground font-medium">It is not a meeting recorder.</span> Otter.ai, Fireflies, Fathom — these tools produce transcripts. A transcript is raw material. Jaifferson is what you do with it.
+                <span className="text-foreground font-medium">It is not a meeting recorder.</span> Otter.ai, Fireflies, Fathom — these tools exist and they are useful. They produce transcripts. A transcript is raw material. Jaifferson is what you do with it.
               </li>
               <li>
-                <span className="text-foreground font-medium">It is not a CRM.</span> It does not track deals. It tracks people — how they think, how they show up, how they change across sessions. The output is not a contact record. It is a reading.
+                <span className="text-foreground font-medium">It is not a CRM.</span> It does not track deals. It does not manage pipelines. It tracks people — how they think, how they show up, how they change across sessions. The output is not a contact record. It is a reading.
               </li>
               <li>
-                <span className="text-foreground font-medium">It is not a coach.</span> It tells you what happened in this room, what it means for where you are now, and what the one move is before the next time you are in a room like this.
+                <span className="text-foreground font-medium">It is not a coach.</span> It does not tell you what to do with your life. It tells you what happened in this room, what it means for where you are now, and what the one move is before the next time you are in a room like this.
               </li>
             </ul>
           </div>
         </section>
 
-        {/* --- Section: What it is trying to change --- */}
+        {/* --- What it is trying to change --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
             What it is trying to change
@@ -235,17 +214,17 @@ const Story = () => {
           </div>
         </section>
 
-        {/* --- Section: The name --- */}
+        {/* --- The name --- */}
         <section className="space-y-6">
           <h2 className="font-serif text-[28px] leading-[1.2] text-foreground">
             The name
           </h2>
           <div className="space-y-4 text-[16px] leading-[1.8] text-muted-foreground">
             <p>
-              The format is inspired by the <span className="text-foreground font-medium">Jeffersonian Dinner</span> — a small, hosted meal built around one meaningful group conversation, usually 8 to 14 people, guided by a single topic and a moderator who keeps the discussion deep, not wide. No small talk. No networking. Just one shared question, explored seriously.
+              The format is inspired by the <span className="text-foreground font-medium">Jeffersonian Dinner</span> — a small, hosted meal built around one meaningful group conversation, guided by a single topic and a host who keeps the discussion deep, not wide.
             </p>
             <p>
-              The name Jaifferson is a deliberate mutation. The "J'ai" — French for "I have" — replaces the "Je" of Jefferson. It carries intention: <em>I have something to bring to the table.</em> The rest sounds familiar enough to evoke the tradition, but different enough to be its own thing.
+              The name Jaifferson is a deliberate mutation. The <em className="text-foreground">J'ai</em> — French for "I have" — replaces the <em>Je</em> of Jefferson. It carries intention: <em className="text-foreground">I have something to bring to the table.</em> The rest sounds familiar enough to evoke the tradition, but different enough to be its own thing.
             </p>
             <p>
               It is not an acronym. It is not named after a person. It is a constructed name — firm enough to carry authority, unusual enough to be unambiguous, precise enough to sound like something that means exactly what it does.
@@ -260,9 +239,6 @@ const Story = () => {
         <footer className="pt-8 border-t border-border text-center space-y-2">
           <p className="text-[13px] tracking-[0.15em] uppercase text-muted-foreground">
             Founded 2026 · Kuala Lumpur × Paris
-          </p>
-          <p className="text-[13px] tracking-[0.15em] uppercase text-muted-foreground">
-            Quentin Cloarec × Eric × Antoine
           </p>
           <p className="font-serif text-[20px] text-foreground italic mt-4">
             "The room talks. Jaifferson remembers."
