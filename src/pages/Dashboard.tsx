@@ -102,6 +102,40 @@ const Dashboard = () => {
       prev.map((a) => (a.id === appId ? { ...a, status } : a))
     );
     toast.success(`Application ${status}.`);
+
+    // Send acceptance email to participant (+ cc quentin@trees-engineering.com)
+    if (status === "accepted") {
+      const app = applications.find((a) => a.id === appId);
+      if (app?.user?.email && selectedSession) {
+        const sessionData = sessions.find((s) => s.id === selectedSession);
+        const participantName = [app.user.first_name, app.user.last_name].filter(Boolean).join(" ") || app.user.email;
+        const hostName = user?.user_metadata?.first_name || "";
+        const sessionUrl = `${window.location.origin}/session/${selectedSession}`;
+        const sessionDate = sessionData?.scheduled_at
+          ? new Date(sessionData.scheduled_at).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })
+          : undefined;
+
+        // Email to participant
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "application-accepted",
+            recipientEmail: app.user.email,
+            idempotencyKey: `app-accepted-${appId}`,
+            templateData: { participantName, sessionTitle: sessionData?.title, sessionDate, hostName, sessionUrl },
+          },
+        });
+
+        // CC to quentin@trees-engineering.com
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "application-accepted",
+            recipientEmail: "quentin@trees-engineering.com",
+            idempotencyKey: `app-accepted-cc-${appId}`,
+            templateData: { participantName, sessionTitle: sessionData?.title, sessionDate, hostName, sessionUrl },
+          },
+        });
+      }
+    }
   };
 
   const handleSignOut = async () => {
