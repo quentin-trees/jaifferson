@@ -192,7 +192,7 @@ const Create = () => {
     }
     setStep("visibility");
     addJaiffersonMessage(
-      "Public or private?",
+      "Locked in.\n\nNow — who gets to see this?\n\n**Public** means anyone browsing Jaifferson can find your session and apply. You still approve every seat — nobody gets in without your say.\n\n**Private** means invite-only. You share the link with the people you want, and only they can apply.",
       [
         { label: "Public", value: "public", icon: <Globe className="h-4 w-4" /> },
         { label: "Private", value: "private", icon: <Lock className="h-4 w-4" /> },
