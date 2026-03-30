@@ -99,6 +99,18 @@ const Index = () => {
       <nav className="flex items-center justify-between px-6 md:px-12 py-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur-sm z-50">
         <Logo />
         <div className="flex items-center gap-6">
+          <button
+            onClick={() => navigate("/story")}
+            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+          >
+            Story
+          </button>
+          <button
+            onClick={() => navigate("/explore")}
+            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+          >
+            {isFr ? "Explorer" : "Explore"}
+          </button>
           <LanguageSwitcher />
           <button
             onClick={() => navigate("/create")}
