@@ -140,6 +140,7 @@ Deno.serve(async (req) => {
       ? new Date(scheduled_at).toLocaleString("en-US", {
           weekday: "long", year: "numeric", month: "long", day: "numeric",
           hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris",
+          timeZoneName: "short",
         })
       : undefined;
 
