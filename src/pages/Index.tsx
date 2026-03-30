@@ -53,22 +53,6 @@ const FESTINS: {
     highlightFr: "Créez le prochain Jaifferson en moins de 5 minutes",
     isPublic: false,
   },
-  {
-    id: "festin-02",
-    number: "02",
-    title: "Applications open — topic TBD by host",
-    titleFr: "Candidatures ouvertes — sujet défini par l'hôte",
-    host: "—",
-    location: "—",
-    date: "May 2026",
-    participants: 0,
-    maxParticipants: 8,
-    status: "open",
-    tags: [],
-    highlight: "Be the first to create the next Jaifferson",
-    highlightFr: "Soyez le premier à créer le prochain Jaifferson",
-    isPublic: false,
-  },
 ];
 
 // ─── Results stats from Festin 00 ─────────────────────────────────────────
