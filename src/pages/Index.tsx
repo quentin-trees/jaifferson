@@ -38,35 +38,19 @@ const FESTINS: {
     isPublic: true,
   },
   {
-    id: "festin-01",
+    id: "next",
     number: "01",
-    title: "Festin 01 — transcript analysis in progress",
-    titleFr: "Festin 01 — analyse du transcript en cours",
-    host: "Quentin",
-    location: "Remote",
-    date: "April 2026",
-    participants: 0,
-    maxParticipants: 8,
-    status: "upcoming",
-    tags: ["founders", "AI", "product"],
-    highlight: "Reports will be published after the session",
-    highlightFr: "Les rapports seront publiés après la session",
-    isPublic: true,
-  },
-  {
-    id: "festin-02",
-    number: "02",
-    title: "Applications open — topic TBD by host",
-    titleFr: "Candidatures ouvertes — sujet défini par l'hôte",
+    title: "Your topic. Your table. Your rules.",
+    titleFr: "Votre sujet. Votre table. Vos règles.",
     host: "—",
     location: "—",
-    date: "May 2026",
+    date: "",
     participants: 0,
     maxParticipants: 8,
     status: "open",
     tags: [],
-    highlight: "Be the first to create the next Jaifferson",
-    highlightFr: "Soyez le premier à créer le prochain Jaifferson",
+    highlight: "Create the next Jaifferson in under 5 minutes",
+    highlightFr: "Créez le prochain Jaifferson en moins de 5 minutes",
     isPublic: false,
   },
 ];
@@ -334,7 +318,7 @@ const Index = () => {
               {isFr ? "Jaiffersons publics" : "Public Jaiffersons"}
             </p>
             <h2 className="font-serif text-[clamp(24px,3.5vw,38px)] leading-tight">
-              {isFr ? "Les prochaines tables." : "Les prochaines tables."}
+              {isFr ? "Les prochaines tables." : "The next tables."}
             </h2>
           </div>
           <button
