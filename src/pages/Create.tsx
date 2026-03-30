@@ -96,7 +96,7 @@ const Create = () => {
 
   useEffect(() => {
     addJaiffersonMessage(
-      "I'm Jaifferson. You want to host a session — a curated conversation around something that actually matters to you.\n\nI'll need a few things. We'll move fast.\n\nFirst: your email."
+      "I've heard your name come up a few times. Tell me something that didn't make it into the introduction.\n\nJust kidding — we haven't met yet. I'm Jaifferson.\n\nYou're here because you want to host a conversation that actually matters. Not a webinar. Not a panel. A room where the right people sit around one question and leave with something they didn't walk in with.\n\nI'll help you set that up. I'll ask pointed questions, push back where it matters, and make sure what you publish is worth someone's time.\n\nLet's start with your email — so I know who's hosting."
     );
     setStep("email");
   }, []);
@@ -164,23 +164,24 @@ const Create = () => {
   const handleEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      addJaiffersonMessage("That's not an email. Try again.");
+      addJaiffersonMessage("That doesn't look like an email. I need a real one — this is where your magic link goes.");
       return;
     }
     setEmail(value);
     setStep("topic");
     addJaiffersonMessage(
-      "Good.\n\nNow — what do you want the room to talk about?\n\nDon't polish it. Say it the way you'd say it to someone you trust."
+      "Good. Now the part that actually matters.\n\nWhat do you want the room to talk about?\n\nHere's what I've learned from dozens of these: the best sessions don't start with a polished thesis. They start with a tension — something you've been thinking about that you can't resolve alone.\n\nSo don't give me a conference title. Give me the version you'd say to a friend at 11pm over a drink. Raw is fine. I'll help you shape it."
     );
   };
 
   const handleTopic = (value: string) => {
     setTopicRaw(value);
-    const refined = value.charAt(0).toUpperCase() + value.slice(1);
+    // Create a slightly more refined version
+    const refined = value.charAt(0).toUpperCase() + value.slice(1).replace(/\.$/, "");
     setTopicRefined(refined);
     setStep("confirm_topic");
     addJaiffersonMessage(
-      `Here's how I'd frame it:\n\n"${refined}"\n\nIf that works, say yes. If not, give me the version you actually want.`
+      `Interesting. I can work with that.\n\nHere's how I'd frame it for the session page — the version strangers will read and decide whether this room is worth their evening:\n\n"${refined}"\n\nThis is what people will see before they apply. If it captures the tension you're after, say yes. If it's off, give me the version you'd actually want someone to read. I'd rather get it right than get it fast.`
     );
   };
 
@@ -191,7 +192,7 @@ const Create = () => {
     }
     setStep("visibility");
     addJaiffersonMessage(
-      "Public or private?",
+      "Locked in.\n\nNow — who gets to see this?\n\n**Public** means anyone browsing Jaifferson can find your session and apply. You still approve every seat — nobody gets in without your say.\n\n**Private** means invite-only. You share the link with the people you want, and only they can apply.",
       [
         { label: "Public", value: "public", icon: <Globe className="h-4 w-4" /> },
         { label: "Private", value: "private", icon: <Lock className="h-4 w-4" /> },
@@ -205,16 +206,21 @@ const Create = () => {
     setStep("max_participants");
     addJaiffersonMessage(
       pub
-        ? "Public. Anyone can find it and apply.\n\nHow many seats?"
-        : "Private. Invite-only.\n\nHow many seats?",
+        ? "Public it is. The session will appear on Explore — but you still curate every seat.\n\nHow many people in the room? My recommendation: smaller is better. 4–5 is the sweet spot where everyone speaks and nobody hides. 6 works if you're confident in the group. 3 is intimate — almost confrontational in the best way."
+        : "Private. Only people with the link will know it exists.\n\nHow many seats? Same advice applies: 4–5 is where the magic happens. Fewer means deeper.",
       SEAT_OPTIONS
     );
   };
 
   const handleMaxParticipantsChoice = (value: string) => {
-    setMaxParticipants(parseInt(value));
+    const num = parseInt(value);
+    setMaxParticipants(num);
     setStep("date");
-    addJaiffersonMessage("When?");
+    addJaiffersonMessage(
+      num <= 4
+        ? `${num} seats. Tight room — that means every word counts. I like it.\n\nWhen should this happen? Pick a date.`
+        : `${num} seats. Good size for a real exchange.\n\nWhen should this happen? Pick a date — ideally give people at least a few days to prepare. The best sessions happen when participants have had time to sit with the questions.`
+    );
   };
 
   const handleDateSelect = (date: Date | undefined) => {
@@ -222,7 +228,7 @@ const Create = () => {
     setSelectedDate(date);
     addUserMessage(format(date, "EEEE, MMMM d, yyyy"));
     setStep("time");
-    addJaiffersonMessage("What time?", TIME_OPTIONS);
+    addJaiffersonMessage("Good. What time?\n\nEvening tends to work best — people are out of work mode and more willing to be honest. But you know your audience.", TIME_OPTIONS);
   };
 
   const handleTimeChoice = (time: string) => {
@@ -235,7 +241,7 @@ const Create = () => {
     }
     setStep("questions_review");
     addJaiffersonMessage(
-      `Last thing. Every applicant will answer three questions before they get a seat. Here are the defaults:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nKeep them or replace them. Your call.`
+      `Almost there. This is the part most hosts underestimate.\n\nEvery applicant will answer three questions before they get a seat. These aren't just screening — they're preparation. The right questions make people think before they arrive, and that's what separates a good conversation from a great one.\n\nHere are the ones I'd use:\n\n1. ${questions[0]}\n2. ${questions[1]}\n3. ${questions[2]}\n\nThese are designed to surface intent, vulnerability, and curiosity — the three things that make a Jaifferson session work.\n\nKeep them as-is, or write your own (one per line). Your call.`
     );
   };
 
@@ -253,7 +259,7 @@ const Create = () => {
       ? format(new Date(scheduledAt), "EEEE, MMMM d 'at' HH:mm")
       : "TBD";
 
-    const summary = `Here's what we have:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public" : "Private"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Questions:** ${questions.length}\n\nIf this is right, publish it.`;
+    const summary = `Here's what we've built:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public — listed on Explore" : "Private — invite only"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Onboarding questions:** ${questions.length}\n\nOnce you publish, this goes live. ${isPublic ? "People will be able to find it, read the topic, and apply." : "Share the link with the people you want in the room."} You approve every participant before they get a seat.\n\nThis looks ready to me. Publish?`;
 
     addJaiffersonMessage(summary, [
       { label: "Publish", value: "publish" },
@@ -294,7 +300,7 @@ const Create = () => {
       setSessionId(data?.session_id);
       setStep("done");
       addJaiffersonMessage(
-        `Done. Your session is live.\n\nA magic link has been sent to ${email}. Use it to access your host dashboard.\n\nShare the session link with the people you want in the room. They'll see the topic, answer your questions, and wait for your decision.\n\nThe room is set. Now fill it with the right people.`
+        `It's live.\n\nI've sent a magic link to **${email}** — use it to access your host dashboard where you'll review applications and manage the room.\n\nHere's what happens next:\n\n1. Share your session link with the people you want in the room\n2. They'll read the topic, answer your three questions, and apply\n3. You review each application and decide who gets a seat\n4. Accepted participants receive their confirmation\n\nThe conversation doesn't start when people sit down. It starts when they read your questions and decide this room is worth their time.\n\nThe room is set. Now fill it with the right people.`
       );
     } catch (err: any) {
       console.error("Error creating session:", err);
