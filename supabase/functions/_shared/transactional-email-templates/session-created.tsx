@@ -89,7 +89,7 @@ export const template = {
     scheduledAt: 'Thursday, April 3, 2026 · 20:00',
     topicRefined: 'How do we maintain human agency when AI agents orchestrate more of our workflows?',
     questions: [
-      'What is one decision you've recently delegated to an AI agent?',
+      'What is one decision you have recently delegated to an AI agent?',
       'Where do you draw the line between efficiency and autonomy?',
     ],
   },
