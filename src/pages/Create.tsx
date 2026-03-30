@@ -164,13 +164,13 @@ const Create = () => {
   const handleEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      addJaiffersonMessage("That's not an email. Try again.");
+      addJaiffersonMessage("That doesn't look like an email. I need a real one — this is where your magic link goes.");
       return;
     }
     setEmail(value);
     setStep("topic");
     addJaiffersonMessage(
-      "Good.\n\nNow — what do you want the room to talk about?\n\nDon't polish it. Say it the way you'd say it to someone you trust."
+      "Good. Now the part that actually matters.\n\nWhat do you want the room to talk about?\n\nHere's what I've learned from dozens of these: the best sessions don't start with a polished thesis. They start with a tension — something you've been thinking about that you can't resolve alone.\n\nSo don't give me a conference title. Give me the version you'd say to a friend at 11pm over a drink. Raw is fine. I'll help you shape it."
     );
   };
 
