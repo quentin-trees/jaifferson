@@ -14,6 +14,7 @@ import Onboard from "./pages/Onboard";
 import Admin from "./pages/Admin";
 import Story from "./pages/Story";
 import Festin from "./pages/Festin";
+import Unsubscribe from "./pages/Unsubscribe";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/story" element={<Story />} />
             <Route path="/festin" element={<Festin />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
