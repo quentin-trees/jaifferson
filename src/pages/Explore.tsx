@@ -164,7 +164,7 @@ const Explore = () => {
                       {session.scheduled_at && (
                         <div className="flex items-center gap-1.5">
                           <CalendarDays className="w-4 h-4" />
-                          <span>{format(new Date(session.scheduled_at), "MMM d, yyyy · HH:mm")}</span>
+                          <span>{format(new Date(session.scheduled_at), "MMM d, yyyy · HH:mm")} CET</span>
                         </div>
                       )}
                       <div className="flex items-center gap-1.5">
