@@ -132,8 +132,40 @@ Deno.serve(async (req) => {
 
     if (participantError) {
       console.error("Error adding host as participant:", participantError);
-      // Non-blocking
     }
+
+    // 6. Send confirmation email to host (+ CC founder)
+    const sessionUrl = `${req.headers.get("origin") || "https://jaifferson.lovable.app"}/session/${session.id}`;
+    const formattedDate = scheduled_at
+      ? new Date(scheduled_at).toLocaleString("en-US", {
+          weekday: "long", year: "numeric", month: "long", day: "numeric",
+          hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris",
+        })
+      : undefined;
+
+    // Look up host name
+    const { data: hostProfile } = await supabase
+      .from("users")
+      .select("first_name")
+      .eq("id", userId)
+      .single();
+
+    await supabase.functions.invoke("send-transactional-email", {
+      body: {
+        templateName: "session-created",
+        recipientEmail: email,
+        idempotencyKey: `session-created-${session.id}`,
+        templateData: {
+          hostName: hostProfile?.first_name || email.split("@")[0],
+          sessionTitle: title,
+          sessionUrl,
+          scheduledAt: formattedDate,
+          topicRefined: topic_refined,
+          questions: questions || [],
+        },
+        cc: ["quentin@trees-engineering.com"],
+      },
+    });
 
     return new Response(
       JSON.stringify({

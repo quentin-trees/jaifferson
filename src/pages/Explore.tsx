@@ -32,7 +32,7 @@ const Explore = () => {
         .from("jaifferson_sessions")
         .select("*")
         .eq("is_public", true)
-        .in("status", ["published", "scheduled"])
+        .in("status", ["open", "published", "scheduled"])
         .order("scheduled_at", { ascending: true });
 
       if (error) {
