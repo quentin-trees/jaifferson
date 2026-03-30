@@ -416,8 +416,11 @@ const Index = () => {
                 </p>
 
                 {f.status === "open" && (
-                  <button className="w-full border border-primary text-primary text-[12px] tracking-widest uppercase py-2.5 hover:bg-primary hover:text-primary-foreground transition-colors mt-1">
-                    {isFr ? "Créer ce Festin" : "Create this Festin"}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate("/create"); }}
+                    className="w-full border border-primary text-primary text-[12px] tracking-widest uppercase py-2.5 hover:bg-primary hover:text-primary-foreground transition-colors mt-1"
+                  >
+                    {isFr ? "Créer un Jaifferson" : "Create a Jaifferson"}
                   </button>
                 )}
               </div>
