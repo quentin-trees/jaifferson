@@ -318,7 +318,7 @@ const Index = () => {
               {isFr ? "Jaiffersons publics" : "Public Jaiffersons"}
             </p>
             <h2 className="font-serif text-[clamp(24px,3.5vw,38px)] leading-tight">
-              {isFr ? "Les prochaines tables." : "Les prochaines tables."}
+              {isFr ? "Les prochaines tables." : "The next tables."}
             </h2>
           </div>
           <button
