@@ -206,8 +206,8 @@ const Create = () => {
     setStep("max_participants");
     addJaiffersonMessage(
       pub
-        ? "Public. Anyone can find it and apply.\n\nHow many seats?"
-        : "Private. Invite-only.\n\nHow many seats?",
+        ? "Public it is. The session will appear on Explore — but you still curate every seat.\n\nHow many people in the room? My recommendation: smaller is better. 4–5 is the sweet spot where everyone speaks and nobody hides. 6 works if you're confident in the group. 3 is intimate — almost confrontational in the best way."
+        : "Private. Only people with the link will know it exists.\n\nHow many seats? Same advice applies: 4–5 is where the magic happens. Fewer means deeper.",
       SEAT_OPTIONS
     );
   };
