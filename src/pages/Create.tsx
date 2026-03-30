@@ -176,11 +176,12 @@ const Create = () => {
 
   const handleTopic = (value: string) => {
     setTopicRaw(value);
-    const refined = value.charAt(0).toUpperCase() + value.slice(1);
+    // Create a slightly more refined version
+    const refined = value.charAt(0).toUpperCase() + value.slice(1).replace(/\.$/, "");
     setTopicRefined(refined);
     setStep("confirm_topic");
     addJaiffersonMessage(
-      `Here's how I'd frame it:\n\n"${refined}"\n\nIf that works, say yes. If not, give me the version you actually want.`
+      `Interesting. I can work with that.\n\nHere's how I'd frame it for the session page — the version strangers will read and decide whether this room is worth their evening:\n\n"${refined}"\n\nThis is what people will see before they apply. If it captures the tension you're after, say yes. If it's off, give me the version you'd actually want someone to read. I'd rather get it right than get it fast.`
     );
   };
 
