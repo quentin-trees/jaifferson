@@ -14,6 +14,7 @@ import Onboard from "./pages/Onboard";
 import Admin from "./pages/Admin";
 import Story from "./pages/Story";
 import Festin from "./pages/Festin";
+import Unsubscribe from "./pages/Unsubscribe";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
