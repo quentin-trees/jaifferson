@@ -213,9 +213,14 @@ const Create = () => {
   };
 
   const handleMaxParticipantsChoice = (value: string) => {
-    setMaxParticipants(parseInt(value));
+    const num = parseInt(value);
+    setMaxParticipants(num);
     setStep("date");
-    addJaiffersonMessage("When?");
+    addJaiffersonMessage(
+      num <= 4
+        ? `${num} seats. Tight room — that means every word counts. I like it.\n\nWhen should this happen? Pick a date.`
+        : `${num} seats. Good size for a real exchange.\n\nWhen should this happen? Pick a date — ideally give people at least a few days to prepare. The best sessions happen when participants have had time to sit with the questions.`
+    );
   };
 
   const handleDateSelect = (date: Date | undefined) => {
