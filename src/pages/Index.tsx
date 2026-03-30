@@ -65,8 +65,8 @@ const FESTINS: {
     maxParticipants: 8,
     status: "open",
     tags: [],
-    highlight: "Be the first to create the next Festin",
-    highlightFr: "Soyez le premier à créer le prochain Festin",
+    highlight: "Be the first to create the next Jaifferson",
+    highlightFr: "Soyez le premier à créer le prochain Jaifferson",
     isPublic: false,
   },
 ];
@@ -99,6 +99,18 @@ const Index = () => {
       <nav className="flex items-center justify-between px-6 md:px-12 py-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur-sm z-50">
         <Logo />
         <div className="flex items-center gap-6">
+          <button
+            onClick={() => navigate("/story")}
+            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+          >
+            Story
+          </button>
+          <button
+            onClick={() => navigate("/explore")}
+            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+          >
+            {isFr ? "Explorer" : "Explore"}
+          </button>
           <LanguageSwitcher />
           <button
             onClick={() => navigate("/create")}
@@ -190,8 +202,8 @@ const Index = () => {
               {[
                 {
                   n: "01",
-                  en: { title: "Create your Festin", desc: "Set the topic, choose public or private, define the number of participants and the onboarding questions Jaifferson will send to applicants." },
-                  fr: { title: "Créez votre Festin", desc: "Définissez le sujet, choisissez public ou privé, le nombre de participants et les questions d'onboarding que Jaifferson enverra aux candidats." },
+                  en: { title: "Create your Jaifferson", desc: "Set the topic, choose public or private, define the number of participants and the onboarding questions Jaifferson will send to applicants." },
+                  fr: { title: "Créez votre Jaifferson", desc: "Définissez le sujet, choisissez public ou privé, le nombre de participants et les questions d'onboarding que Jaifferson enverra aux candidats." },
                 },
                 {
                   n: "02",
@@ -235,8 +247,8 @@ const Index = () => {
               {[
                 {
                   n: "01",
-                  en: { title: "Discover & apply", desc: "Browse public Festins or receive a private invitation. Answer the host's onboarding questions. Your application goes directly to the host for approval." },
-                  fr: { title: "Découvrez & candidatez", desc: "Parcourez les Festins publics ou recevez une invitation privée. Répondez aux questions d'onboarding de l'hôte. Votre candidature est transmise directement à l'hôte." },
+                  en: { title: "Discover & apply", desc: "Browse public Jaiffersons or receive a private invitation. Answer the host's onboarding questions. Your application goes directly to the host for approval." },
+                  fr: { title: "Découvrez & candidatez", desc: "Parcourez les Jaiffersons publics ou recevez une invitation privée. Répondez aux questions d'onboarding de l'hôte. Votre candidature est transmise directement à l'hôte." },
                 },
                 {
                   n: "02",
@@ -339,10 +351,12 @@ const Index = () => {
             return (
               <div
                 key={f.id}
-                className={`border border-border p-7 flex flex-col gap-5 group ${
-                  f.status !== "past" ? "cursor-pointer hover:border-foreground/40 transition-colors" : ""
-                }`}
-                onClick={() => f.status !== "past" && navigate(`/festin/${f.id}`)}
+                className={`border border-border p-7 flex flex-col gap-5 group cursor-pointer hover:border-foreground/40 transition-colors`}
+                onClick={() => {
+                  if (f.id === "festin-00") navigate("/festin");
+                  else if (f.status === "open") navigate("/create");
+                  else navigate(`/explore`);
+                }}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3">
@@ -402,8 +416,11 @@ const Index = () => {
                 </p>
 
                 {f.status === "open" && (
-                  <button className="w-full border border-primary text-primary text-[12px] tracking-widest uppercase py-2.5 hover:bg-primary hover:text-primary-foreground transition-colors mt-1">
-                    {isFr ? "Créer ce Festin" : "Create this Festin"}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate("/create"); }}
+                    className="w-full border border-primary text-primary text-[12px] tracking-widest uppercase py-2.5 hover:bg-primary hover:text-primary-foreground transition-colors mt-1"
+                  >
+                    {isFr ? "Créer un Jaifferson" : "Create a Jaifferson"}
                   </button>
                 )}
               </div>
