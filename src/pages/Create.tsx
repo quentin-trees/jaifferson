@@ -96,7 +96,7 @@ const Create = () => {
 
   useEffect(() => {
     addJaiffersonMessage(
-      "I'm Jaifferson. You want to host a session — a curated conversation around something that actually matters to you.\n\nI'll need a few things. We'll move fast.\n\nFirst: your email."
+      "I've heard your name come up a few times. Tell me something that didn't make it into the introduction.\n\nJust kidding — we haven't met yet. I'm Jaifferson.\n\nYou're here because you want to host a conversation that actually matters. Not a webinar. Not a panel. A room where the right people sit around one question and leave with something they didn't walk in with.\n\nI'll help you set that up. I'll ask pointed questions, push back where it matters, and make sure what you publish is worth someone's time.\n\nLet's start with your email — so I know who's hosting."
     );
     setStep("email");
   }, []);
