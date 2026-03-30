@@ -259,7 +259,7 @@ const Create = () => {
       ? format(new Date(scheduledAt), "EEEE, MMMM d 'at' HH:mm")
       : "TBD";
 
-    const summary = `Here's what we have:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public" : "Private"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Questions:** ${questions.length}\n\nIf this is right, publish it.`;
+    const summary = `Here's what we've built:\n\n**Topic:** ${topicRefined}\n**Visibility:** ${isPublic ? "Public — listed on Explore" : "Private — invite only"}\n**Seats:** ${maxParticipants}\n**Date:** ${dateStr}\n**Onboarding questions:** ${questions.length}\n\nOnce you publish, this goes live. ${isPublic ? "People will be able to find it, read the topic, and apply." : "Share the link with the people you want in the room."} You approve every participant before they get a seat.\n\nThis looks ready to me. Publish?`;
 
     addJaiffersonMessage(summary, [
       { label: "Publish", value: "publish" },
