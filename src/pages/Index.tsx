@@ -65,8 +65,8 @@ const FESTINS: {
     maxParticipants: 8,
     status: "open",
     tags: [],
-    highlight: "Be the first to create the next Festin",
-    highlightFr: "Soyez le premier à créer le prochain Festin",
+    highlight: "Be the first to create the next Jaifferson",
+    highlightFr: "Soyez le premier à créer le prochain Jaifferson",
     isPublic: false,
   },
 ];
