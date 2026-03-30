@@ -31,7 +31,7 @@ const App = () => (
             <Route path="/explore" element={<Explore />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/session" element={<Session />} />
+            <Route path="/session/:id" element={<Session />} />
             <Route path="/onboard" element={<Onboard />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/story" element={<Story />} />
