@@ -247,8 +247,8 @@ const Index = () => {
               {[
                 {
                   n: "01",
-                  en: { title: "Discover & apply", desc: "Browse public Festins or receive a private invitation. Answer the host's onboarding questions. Your application goes directly to the host for approval." },
-                  fr: { title: "Découvrez & candidatez", desc: "Parcourez les Festins publics ou recevez une invitation privée. Répondez aux questions d'onboarding de l'hôte. Votre candidature est transmise directement à l'hôte." },
+                  en: { title: "Discover & apply", desc: "Browse public Jaiffersons or receive a private invitation. Answer the host's onboarding questions. Your application goes directly to the host for approval." },
+                  fr: { title: "Découvrez & candidatez", desc: "Parcourez les Jaiffersons publics ou recevez une invitation privée. Répondez aux questions d'onboarding de l'hôte. Votre candidature est transmise directement à l'hôte." },
                 },
                 {
                   n: "02",
