@@ -126,80 +126,35 @@ const Session = () => {
 
     setSubmitting(true);
 
-    const applicationId = crypto.randomUUID();
     const answersPayload = questions.map((q) => ({
       question_id: q.id,
       question: q.question,
-      answer: answers[q.id],
+      answer: answers[q.id].trim(),
     }));
 
-    const { error } = await supabase.from("session_applications").insert({
-      id: applicationId,
-      session_id: id,
-      user_id: user.id,
-      answers: answersPayload,
-      status: "pending",
+    const { data, error } = await supabase.functions.invoke("submit-session-application", {
+      body: {
+        sessionId: id,
+        answers: answersPayload,
+      },
     });
 
-    if (error) {
-      console.error("Application error:", error);
+    if (error || !data?.success) {
+      console.error("Application error:", error || data);
       toast.error("Something went wrong. Try again.");
-    } else {
-      setSubmitted(true);
-      toast.success("Application submitted. The host will review it.");
-
-      // Send email notification to host (+ cc quentin@trees-engineering.com)
-      if (session) {
-        const hostEmail = await supabase.from("users").select("email, first_name").eq("id", session.host_id).single();
-        const applicantName = [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(" ") || user.email;
-        const sessionUrl = `${window.location.origin}/dashboard`;
-
-        // Email to host
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "application-received",
-            recipientEmail: hostEmail.data?.email,
-            idempotencyKey: `app-received-host-${applicationId}`,
-            templateData: {
-              applicantName,
-              sessionTitle: session.title,
-              sessionUrl,
-              answers: answersPayload.map((a) => ({ question: a.question, answer: a.answer })),
-            },
-          },
-        });
-
-        // CC to skai@mafia.emao
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "application-received",
-            recipientEmail: "skai@mafia.email",
-            idempotencyKey: `app-received-cc-${applicationId}`,
-            templateData: {
-              applicantName,
-              sessionTitle: session.title,
-              sessionUrl,
-              answers: answersPayload.map((a) => ({ question: a.question, answer: a.answer })),
-            },
-          },
-        });
-
-        // Confirmation copy to participant
-        supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "application-received",
-            recipientEmail: user.email,
-            idempotencyKey: `app-received-participant-${applicationId}`,
-            templateData: {
-              applicantName,
-              sessionTitle: session.title,
-              sessionUrl: `${window.location.origin}/session/${id}`,
-              answers: answersPayload.map((a) => ({ question: a.question, answer: a.answer })),
-            },
-          },
-        });
-      }
+      setSubmitting(false);
+      return;
     }
+
+    setSubmitted(true);
+    setExistingApplication(data.status || "pending");
+    toast.success(
+      data.alreadyApplied
+        ? "Application already submitted."
+        : data.emailQueued === false
+        ? "Application submitted, but the confirmation email could not be queued."
+        : "Application submitted. The host will review it."
+    );
     setSubmitting(false);
   };
 
