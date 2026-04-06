@@ -42,53 +42,75 @@ const Session = () => {
   const [user, setUser] = useState<any>(null);
   const [acceptedCount, setAcceptedCount] = useState(0);
 
+  const fetchSessionData = async (currentUser: any) => {
+    if (!id) return;
+
+    // Fetch session
+    const { data: sessionData, error } = await supabase
+      .from("jaifferson_sessions")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error || !sessionData) {
+      setLoading(false);
+      return;
+    }
+    setSession(sessionData);
+
+    // Fetch host, questions, accepted count in parallel
+    const [hostRes, questionsRes, countRes] = await Promise.all([
+      supabase.from("users").select("first_name, last_name").eq("id", sessionData.host_id).single(),
+      supabase.from("session_questions").select("*").eq("session_id", id).order("order_index"),
+      supabase.from("session_applications").select("*", { count: "exact", head: true }).eq("session_id", id).eq("status", "accepted"),
+    ]);
+
+    setHost(hostRes.data);
+    setQuestions(questionsRes.data || []);
+    setAcceptedCount(countRes.count || 0);
+
+    // Check existing application
+    if (currentUser) {
+      const { data: app } = await supabase
+        .from("session_applications")
+        .select("status")
+        .eq("session_id", id)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+      if (app) setExistingApplication(app.status);
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-
-      // Get current user
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
+    // Listen for auth state changes (handles magic link redirect)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const currentUser = session?.user ?? null;
       setUser(currentUser);
-
-      // Fetch session
-      const { data: sessionData, error } = await supabase
-        .from("jaifferson_sessions")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error || !sessionData) {
-        setLoading(false);
-        return;
-      }
-      setSession(sessionData);
-
-      // Fetch host, questions, accepted count in parallel
-      const [hostRes, questionsRes, countRes] = await Promise.all([
-        supabase.from("users").select("first_name, last_name").eq("id", sessionData.host_id).single(),
-        supabase.from("session_questions").select("*").eq("session_id", id).order("order_index"),
-        supabase.from("session_applications").select("*", { count: "exact", head: true }).eq("session_id", id).eq("status", "accepted"),
-      ]);
-
-      setHost(hostRes.data);
-      setQuestions(questionsRes.data || []);
-      setAcceptedCount(countRes.count || 0);
-
-      // Check existing application
-      if (currentUser) {
-        const { data: app } = await supabase
+      // Re-check existing application when user signs in
+      if (currentUser && id) {
+        supabase
           .from("session_applications")
           .select("status")
           .eq("session_id", id)
           .eq("user_id", currentUser.id)
-          .maybeSingle();
-        if (app) setExistingApplication(app.status);
+          .maybeSingle()
+          .then(({ data: app }) => {
+            if (app) setExistingApplication(app.status);
+          });
       }
+    });
 
-      setLoading(false);
+    // Initial fetch
+    const init = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      setUser(currentUser);
+      await fetchSessionData(currentUser);
     };
+    init();
 
-    fetchData();
+    return () => subscription.unsubscribe();
   }, [id]);
 
   const handleApply = async () => {
@@ -147,11 +169,11 @@ const Session = () => {
           },
         });
 
-        // CC to quentin@trees-engineering.com
+        // CC to skai@mafia.emao
         supabase.functions.invoke("send-transactional-email", {
           body: {
             templateName: "application-received",
-            recipientEmail: "quentin@trees-engineering.com",
+            recipientEmail: "skai@mafia.emao",
             idempotencyKey: `app-received-cc-${applicationId}`,
             templateData: {
               applicantName,
