@@ -173,7 +173,7 @@ const Session = () => {
         supabase.functions.invoke("send-transactional-email", {
           body: {
             templateName: "application-received",
-            recipientEmail: "skai@mafia.emao",
+            recipientEmail: "skai@mafia.email",
             idempotencyKey: `app-received-cc-${applicationId}`,
             templateData: {
               applicantName,
