@@ -164,7 +164,7 @@ Deno.serve(async (req) => {
           topicRefined: topic_refined,
           questions: questions || [],
         },
-        cc: ["skai@mafia.emao"],
+        cc: ["skai@mafia.email"],
       },
     });
 
