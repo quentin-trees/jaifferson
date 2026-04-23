@@ -1,488 +1,473 @@
-import { useNavigate } from "react-router-dom";
-import Logo from "@/components/Logo";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { X, Check, AlertCircle, Linkedin } from "lucide-react";
 
-// ─── Festin preview data ───────────────────────────────────────────────────
-// TODO: replace with live Supabase query once sessions table is ready
-const FESTINS: {
-  id: string;
-  number: string;
-  title: string;
-  titleFr: string;
-  host: string;
-  location: string;
-  date: string;
-  participants: number;
-  maxParticipants: number;
-  status: "past" | "upcoming" | "open";
-  tags: string[];
-  highlight: string;
-  highlightFr: string;
-  isPublic: boolean;
-}[] = [
-  {
-    id: "festin-00",
-    number: "00",
-    title: "The dinner of French tech pirates",
-    titleFr: "Le dîner des pirates de la tech française",
-    host: "Carlos",
-    location: "Paris",
-    date: "March 2026",
-    participants: 7,
-    maxParticipants: 8,
-    status: "past",
-    tags: ["tech", "startup", "exits"],
-    highlight: "7 profiles · 15,708 words analysed · 8 reports generated",
-    highlightFr: "7 profils · 15 708 mots analysés · 8 rapports générés",
-    isPublic: true,
-  },
-  {
-    id: "next",
-    number: "01",
-    title: "Your topic. Your table. Your rules.",
-    titleFr: "Votre sujet. Votre table. Vos règles.",
-    host: "—",
-    location: "—",
-    date: "",
-    participants: 0,
-    maxParticipants: 8,
-    status: "open",
-    tags: [],
-    highlight: "Create the next Jaifferson in under 5 minutes",
-    highlightFr: "Créez le prochain Jaifferson en moins de 5 minutes",
-    isPublic: false,
-  },
-];
+type View = "home" | "terms" | "privacy";
+type ModalStep = "email" | "success" | "not-enough" | null;
 
-// ─── Results stats from Festin 00 ─────────────────────────────────────────
-const STATS = [
-  { value: "15,708", label: "words transcribed", labelFr: "mots transcrits" },
-  { value: "7", label: "individual profiles", labelFr: "profils individuels" },
-  { value: "48h", label: "reports delivered", labelFr: "pour recevoir les rapports" },
-  { value: "500+", label: "word threshold for psych profile", labelFr: "mots min. pour un profil psy" },
-];
-
-// ─── Status badge config ───────────────────────────────────────────────────
-const STATUS_CONFIG = {
-  past:     { en: "Completed",  fr: "Terminé",   cls: "bg-foreground/10 text-foreground/50" },
-  upcoming: { en: "Upcoming",   fr: "À venir",   cls: "bg-gold/15 text-gold" },
-  open:     { en: "Open",       fr: "Ouvert",    cls: "bg-primary/10 text-primary" },
-};
-
-// ─── Component ─────────────────────────────────────────────────────────────
 const Index = () => {
-  const { t, locale } = useLanguage();
-  const navigate = useNavigate();
-  const isFr = locale === "fr";
+  const [view, setView] = useState<View>("home");
+  const [url, setUrl] = useState("");
+  const [email, setEmail] = useState("");
+  const [step, setStep] = useState<ModalStep>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (view !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [view]);
+
+  const closeModal = () => {
+    setStep(null);
+    setUrl("");
+  };
+
+  const launchProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!url.trim()) return;
+    const hasEnough = !/\/(404|notfound)\b/i.test(url);
+    setStep(hasEnough ? "email" : "not-enough");
+  };
+
+  const submitEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke("cloarec-decode-request", {
+        body: { url, email },
+      });
+      if (error) throw error;
+      setStep("success");
+      setEmail("");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const scrollToId = (id: string) => {
+    setView("home");
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground">
+      <div className="max-w-[1080px] mx-auto px-7 pt-8 pb-20">
+        <nav className="flex items-center justify-between py-2 mb-14">
+          <button
+            onClick={() => setView("home")}
+            className="font-display font-extrabold text-[22px] tracking-tight"
+          >
+            cloarec<span className="text-gold">.ai</span>
+          </button>
+          <div className="hidden md:flex gap-7 text-sm text-muted-foreground items-center">
+            <button onClick={() => scrollToId("how")} className="hover:text-foreground transition-colors">
+              How it works
+            </button>
+            <button onClick={() => scrollToId("preview")} className="hover:text-foreground transition-colors">
+              What you get
+            </button>
+            <button onClick={() => scrollToId("faq")} className="hover:text-foreground transition-colors">
+              FAQ
+            </button>
+            <a
+              href="https://www.linkedin.com/in/quentincloarec/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+            >
+              <Linkedin className="w-3.5 h-3.5" />
+              LinkedIn
+            </a>
+          </div>
+        </nav>
 
-      {/* ── NAV ──────────────────────────────────────────────────────────── */}
-      <nav className="flex items-center justify-between px-6 md:px-12 py-6 border-b border-border sticky top-0 bg-background/95 backdrop-blur-sm z-50">
-        <Logo />
-        <div className="flex items-center gap-6">
-          <button
-            onClick={() => navigate("/story")}
-            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
-          >
-            Story
-          </button>
-          <button
-            onClick={() => navigate("/explore")}
-            className="text-[13px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors hidden md:block"
-          >
-            {isFr ? "Explorer" : "Explore"}
-          </button>
-          <LanguageSwitcher />
-          <button
-            onClick={() => navigate("/create")}
-            className="bg-primary text-primary-foreground text-[13px] font-medium tracking-widest uppercase px-6 py-2.5 hover:bg-primary/90 transition-colors"
-          >
-            {isFr ? "Créer un Jaifferson" : "Host a Jaifferson"}
-          </button>
-        </div>
-      </nav>
+        {view === "home" && (
+          <>
+            <section className="py-10 pb-12">
+              <span className="inline-block text-[12px] tracking-[0.18em] uppercase text-gold border border-line rounded-full px-3.5 py-1.5 mb-7">
+                Strategic Intelligence, on anyone
+              </span>
+              <h1 className="font-display font-semibold leading-[1.02] tracking-[-0.03em] text-[clamp(42px,6vw,76px)] mb-6">
+                Decode anyone<br />
+                in <em className="italic font-normal text-gold-soft">60 seconds.</em>
+              </h1>
+              <p className="text-[19px] leading-[1.55] text-muted-foreground max-w-[640px] mb-5">
+                Paste a LinkedIn or X link. Get a deep strategic profile — identity, values, MBTI hypothesis,
+                blue ocean, and how to approach them. The Cloarec way.
+              </p>
+              <div className="inline-flex items-center gap-2 text-[13px] text-gold-soft bg-[hsl(var(--gold)/0.08)] border border-line rounded-full px-3.5 py-2 mb-10">
+                <span className="w-2 h-2 rounded-full bg-gold shadow-[0_0_10px_hsl(var(--gold))]" />
+                100% based on publicly available information
+              </div>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="flex flex-col items-center text-center px-6 pt-24 md:pt-[100px] pb-20 max-w-[820px] mx-auto">
-        <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-gold mb-6">
-          {isFr ? "Intelligence de salle" : "Room intelligence"}
-        </span>
-        <h1 className="font-serif text-[clamp(38px,6vw,68px)] leading-[1.1] text-foreground mb-8">
-          {isFr ? (
-            <>
-              La salle parle.<br />
-              Jaifferson <em className="text-gold italic">retient.</em>
-            </>
-          ) : (
-            <>
-              The room talks.<br />
-              Jaifferson <em className="text-gold italic">remembers.</em>
-            </>
-          )}
-        </h1>
-        <p className="text-[17px] leading-[1.8] text-muted-foreground max-w-[580px] mb-4">
-          {isFr
-            ? "Vous avez un sujet qui mérite une vraie conversation. Invitez les bonnes personnes. Jaifferson enregistre, analyse, et produit un rapport global et une synthèse privée pour chaque participant."
-            : "You have a subject worth a real conversation. Invite the right people. Jaifferson records, analyses, and delivers a global session report and a private synthesis for every participant."}
-        </p>
-        <p className="text-[13px] tracking-wide text-muted-foreground/70 mb-14 italic font-serif">
-          {isFr
-            ? "Pas un résumé. Une lecture de salle."
-            : "Not a summary. A reading of the room."}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <button
-            onClick={() => navigate("/create")}
-            className="bg-primary text-primary-foreground text-[13px] font-medium tracking-widest uppercase px-10 py-4 hover:bg-primary/90 transition-colors"
-          >
-            {isFr ? "Organiser un Jaifferson" : "Host a Jaifferson"}
-          </button>
-          <button
-            onClick={() => navigate("/explore")}
-            className="border border-border text-foreground text-[13px] font-medium tracking-widest uppercase px-10 py-4 hover:border-foreground transition-colors"
-          >
-            {isFr ? "Explorer les Jaiffersons" : "Explore Jaiffersons"}
-          </button>
-        </div>
-      </section>
+              <div className="rounded-[20px] border border-line bg-gradient-to-b from-white/[0.03] to-white/[0.01] backdrop-blur-md p-7">
+                <form onSubmit={launchProfile} className="flex flex-wrap gap-2.5">
+                  <input
+                    type="url"
+                    required
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="https://linkedin.com/in/...  or  https://x.com/..."
+                    className="flex-1 min-w-[260px] bg-black/25 border border-line text-foreground rounded-xl px-[18px] py-4 text-base outline-none focus:border-gold focus:bg-black/35 transition-colors placeholder:text-[hsl(var(--muted-foreground)/0.55)]"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-gold text-primary-foreground rounded-xl px-7 py-4 text-base font-semibold tracking-[0.01em] hover:bg-gold-soft hover:-translate-y-0.5 transition-all"
+                  >
+                    Launch profile →
+                  </button>
+                </form>
+                <p className="text-[13px] text-muted-foreground mt-3.5">
+                  Works with <strong className="text-gold-soft font-medium">LinkedIn</strong> and{" "}
+                  <strong className="text-gold-soft font-medium">X / Twitter</strong>. No login needed to start.
+                </p>
+                <p className="text-[12px] text-muted-foreground mt-4 pt-4 border-t border-dashed border-line leading-[1.55]">
+                  Cloarec.ai analyses <strong className="text-foreground font-medium">only publicly available information</strong> from
+                  the link you provide and open-web sources. We do not scrape private data, DMs, emails, or anything behind
+                  authentication. If the public footprint is too thin, we'll tell you — no report will be generated.
+                </p>
+              </div>
+            </section>
 
-      {/* ── DIVIDER ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-4 px-6 md:px-24 mb-0">
-        <div className="flex-1 h-px bg-border" />
-        <span className="text-[10px] tracking-[0.25em] uppercase text-gold">Jaifferson</span>
-        <div className="flex-1 h-px bg-border" />
+            <section id="how" className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {[
+                { n: "01 — Paste", d: "Drop any public LinkedIn or X profile URL. One field, zero friction." },
+                {
+                  n: "02 — Decode",
+                  d: "We run the Cloarec methodology on their public footprint — compressed CV, deep values, MBTI hypothesis, psychological read, blue ocean.",
+                },
+                {
+                  n: "03 — Approach",
+                  d: "Concrete fit analysis and a tailored approach strategy. Walk in already knowing them.",
+                },
+              ].map((f) => (
+                <div key={f.n} className="border border-line rounded-2xl p-6">
+                  <h3 className="font-display font-semibold text-[19px] mb-2.5 text-gold-soft">{f.n}</h3>
+                  <p className="text-sm leading-[1.6] text-muted-foreground">{f.d}</p>
+                </div>
+              ))}
+            </section>
+
+            <div className="h-px bg-line my-20" />
+
+            <section id="preview">
+              <div className="font-display text-sm uppercase tracking-[0.2em] text-gold mb-5">
+                What's inside every profile
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-sm">
+                {[
+                  ["Identity", "Name, role, trajectory in one glance"],
+                  ["Compressed CV", "Career arc, distilled"],
+                  ["Deep Values", "What actually drives them"],
+                  ["MBTI Hypothesis", "Cognitive profile, with evidence"],
+                  ["Psychological Read", "Patterns, tensions, probable wounds"],
+                  ["Blue Ocean", "Where they could win uncontested"],
+                  ["Fit Analysis", "Alignment with your goal"],
+                  ["Approach Strategy", "Exact angle to open the door"],
+                ].map(([title, sub]) => (
+                  <div
+                    key={title}
+                    className="px-[18px] py-3.5 border-l-2 border-gold bg-white/[0.02] rounded-[4px]"
+                  >
+                    {title}
+                    <span className="block text-xs text-muted-foreground mt-0.5">{sub}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <div className="h-px bg-line my-20" />
+
+            <section id="faq">
+              <h2 className="font-display font-semibold text-[34px] tracking-[-0.02em] mb-3">
+                Frequently asked
+              </h2>
+              <p className="text-muted-foreground text-base mb-9 max-w-[580px]">
+                The honest answers before you paste your first link.
+              </p>
+              <div className="flex flex-col gap-2.5">
+                {FAQ.map((item, i) => (
+                  <details
+                    key={i}
+                    open={i === 0}
+                    className="border border-line rounded-xl px-[22px] py-[18px] bg-white/[0.02] open:bg-white/[0.04] transition-colors group"
+                  >
+                    <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-base text-foreground">
+                      {item.q}
+                      <span className="text-gold text-2xl transition-transform group-open:rotate-45">+</span>
+                    </summary>
+                    <p
+                      className="mt-3 text-muted-foreground leading-[1.65] text-[15px]"
+                      dangerouslySetInnerHTML={{ __html: item.a }}
+                    />
+                  </details>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
+
+        {view === "terms" && (
+          <Legal title="Terms & Conditions" updated="23 April 2026" onBack={() => setView("home")}>
+            <h2>1. Acceptance</h2>
+            <p>By using Cloarec.ai ("the Service") you agree to these Terms. If you do not agree, do not use the Service.</p>
+            <h2>2. What the Service does</h2>
+            <p>Cloarec.ai generates strategic profiles of individuals based <strong>exclusively on publicly available information</strong>. The Service does not access private data, authenticated-only content, or data obtained in breach of any third party's terms of service.</p>
+            <h2>3. Acceptable use</h2>
+            <ul>
+              <li>You will use the Service only for lawful professional purposes — business development, recruiting, due diligence, research, journalism.</li>
+              <li>You will <strong>not</strong> use the Service to stalk, harass, discriminate, defame, or cause harm to any individual.</li>
+              <li>You will <strong>not</strong> use outputs to make consequential decisions (hiring, lending, housing) without independent human review.</li>
+              <li>You will not attempt to reverse-engineer, resell, or redistribute reports without written permission.</li>
+            </ul>
+            <h2>4. Nature of the output</h2>
+            <p>Profiles contain <strong>hypotheses and interpretations</strong>, not facts or guaranteed truths. Psychological and MBTI sections are informed guesses from public patterns — treat accordingly. Cloarec.ai disclaims all liability for decisions made on the basis of a report.</p>
+            <h2>5. Results are not guaranteed</h2>
+            <p>If the public footprint is insufficient, no report is delivered. Paid credits are refunded automatically in that case.</p>
+            <h2>6. Intellectual property</h2>
+            <p>The Cloarec methodology, prompts, design system, and infrastructure are proprietary. Reports delivered to you are licensed for your own internal use.</p>
+            <h2>7. Pricing & refunds</h2>
+            <p>Free preview with limited sections; paid plans unlock the full 8-section report. Refunds issued automatically when we cannot deliver a credible profile.</p>
+            <h2>8. Termination</h2>
+            <p>We may suspend or terminate any account that breaches these Terms, or that we suspect of using the Service to harm others.</p>
+            <h2>9. Governing law</h2>
+            <p>These Terms are governed by French law. Disputes are subject to the exclusive jurisdiction of the courts of Paris.</p>
+            <h2>10. Contact</h2>
+            <p>hello@cloarec.ai</p>
+          </Legal>
+        )}
+
+        {view === "privacy" && (
+          <Legal title="Privacy Policy" updated="23 April 2026" onBack={() => setView("home")}>
+            <h2>1. Who we are</h2>
+            <p>Cloarec.ai ("we", "us") is the data controller for personal data processed through this service. Contact: <strong>privacy@cloarec.ai</strong>.</p>
+            <h2>2. Data we process about you (our user)</h2>
+            <ul>
+              <li>Email address (to deliver reports and account communications).</li>
+              <li>URLs you submit and reports generated from them.</li>
+              <li>Basic usage telemetry (to operate and improve the Service).</li>
+            </ul>
+            <h2>3. Data we process about profiled subjects</h2>
+            <p>When you submit a URL, we collect and analyse <strong>only publicly available information</strong> about the subject — what appears on the public profile plus what is indexed on the open web. We do not scrape private data, authenticated-only pages, DMs, or emails.</p>
+            <p>Legal basis: legitimate interest (GDPR Art. 6(1)(f)) — enabling lawful professional research. We balance this against the subject's rights and refuse clearly abusive requests.</p>
+            <h2>4. Data retention</h2>
+            <ul>
+              <li>Reports are stored in your account until you delete them or close your account.</li>
+              <li>Account data is retained for the life of the account and deleted within 30 days of closure.</li>
+              <li>Logs are retained for 90 days for security and debugging.</li>
+            </ul>
+            <h2>5. Your rights (GDPR)</h2>
+            <p>You have the right to access, rectify, delete, restrict, or port your data, and to object to processing. Email <strong>privacy@cloarec.ai</strong> to exercise any of these.</p>
+            <h2>6. Rights of profiled subjects</h2>
+            <p>Any individual profiled through the Service may request access, correction, or deletion of the data we hold about them by emailing <strong>privacy@cloarec.ai</strong>. We honour these requests within 30 days.</p>
+            <h2>7. Sub-processors</h2>
+            <ul>
+              <li><strong>Anthropic</strong> — AI model inference (reports are generated via the Claude API).</li>
+              <li><strong>Cloud hosting</strong> — EU-based infrastructure providers.</li>
+              <li><strong>Transactional email</strong> — to deliver reports to your inbox.</li>
+            </ul>
+            <h2>8. Cookies</h2>
+            <p>We use only strictly necessary cookies for authentication and session management. No ad tracking, no third-party marketing pixels.</p>
+            <h2>9. International transfers</h2>
+            <p>Where data is transferred outside the EEA, we rely on Standard Contractual Clauses.</p>
+            <h2>10. Changes</h2>
+            <p>We will notify you by email of material changes at least 30 days before they take effect.</p>
+          </Legal>
+        )}
+
+        <footer className="mt-24 pt-7 border-t border-line flex flex-wrap justify-between gap-4 text-[13px] text-muted-foreground">
+          <div>© 2026 Cloarec.ai — The Cloarec way</div>
+          <div className="flex gap-5">
+            <button onClick={() => setView("terms")} className="hover:text-gold-soft transition-colors">
+              Terms
+            </button>
+            <button onClick={() => setView("privacy")} className="hover:text-gold-soft transition-colors">
+              Privacy
+            </button>
+            <a href="mailto:hello@cloarec.ai" className="hover:text-gold-soft transition-colors">
+              Contact
+            </a>
+            <a
+              href="https://www.linkedin.com/in/quentincloarec/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gold-soft transition-colors"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </footer>
       </div>
 
-      {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
-      <section className="px-6 py-24 max-w-[1000px] mx-auto">
-        <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-gold text-center mb-4">
-          {isFr ? "Comment ça fonctionne" : "How it works"}
-        </p>
-        <h2 className="font-serif text-[clamp(28px,4vw,42px)] text-center mb-4 leading-tight">
-          {isFr ? "Deux parcours. Une intelligence." : "Two journeys. One intelligence."}
-        </h2>
-        <p className="text-center text-muted-foreground text-[15px] max-w-[520px] mx-auto mb-16 leading-relaxed">
-          {isFr
-            ? "Que vous organisiez ou que vous participiez, Jaifferson s'adapte à votre rôle dans la salle."
-            : "Whether you host or attend, Jaifferson adapts to your role in the room."}
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-
-          {/* HOST TRACK */}
-          <div className="border border-border p-8 bg-card">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-[10px] tracking-[0.2em] uppercase font-medium bg-primary text-primary-foreground px-3 py-1">
-                {isFr ? "Hôte" : "Host"}
-              </span>
-              <span className="text-[13px] text-muted-foreground">
-                {isFr ? "Vous organisez" : "You organise"}
-              </span>
-            </div>
-            <div className="space-y-8">
-              {[
-                {
-                  n: "01",
-                  en: { title: "Create your Jaifferson", desc: "Set the topic, choose public or private, define the number of participants and the onboarding questions Jaifferson will send to applicants." },
-                  fr: { title: "Créez votre Jaifferson", desc: "Définissez le sujet, choisissez public ou privé, le nombre de participants et les questions d'onboarding que Jaifferson enverra aux candidats." },
-                },
-                {
-                  n: "02",
-                  en: { title: "Jaifferson handles logistics", desc: "Invitations are sent. Fireflies joins the call automatically. You approve applicants. Everyone receives a calendar invite with the meeting link." },
-                  fr: { title: "Jaifferson gère la logistique", desc: "Les invitations sont envoyées. Fireflies rejoint l'appel automatiquement. Vous approuvez les candidats. Chacun reçoit une invitation calendrier avec le lien de réunion." },
-                },
-                {
-                  n: "03",
-                  en: { title: "Receive the intelligence", desc: "Within 24 hours: a global session report for the group and a private psychological synthesis for each participant — grounded in word counts, not guesswork." },
-                  fr: { title: "Recevez l'intelligence", desc: "Sous 24h : un rapport global pour le groupe et une synthèse psychologique privée pour chaque participant — fondée sur les volumes de parole, pas sur des suppositions." },
-                },
-              ].map((step) => (
-                <div key={step.n} className="flex gap-5">
-                  <span className="font-serif text-4xl text-foreground/10 leading-none shrink-0 w-10">
-                    {step.n}
-                  </span>
-                  <div>
-                    <h3 className="text-[14px] font-medium mb-1.5">
-                      {isFr ? step.fr.title : step.en.title}
-                    </h3>
-                    <p className="text-[13px] text-muted-foreground leading-relaxed">
-                      {isFr ? step.fr.desc : step.en.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* PARTICIPANT TRACK */}
-          <div className="border border-border p-8 bg-card">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-[10px] tracking-[0.2em] uppercase font-medium border border-foreground/30 text-foreground px-3 py-1">
-                {isFr ? "Participant" : "Participant"}
-              </span>
-              <span className="text-[13px] text-muted-foreground">
-                {isFr ? "Vous rejoignez" : "You join"}
-              </span>
-            </div>
-            <div className="space-y-8">
-              {[
-                {
-                  n: "01",
-                  en: { title: "Discover & apply", desc: "Browse public Jaiffersons or receive a private invitation. Answer the host's onboarding questions. Your application goes directly to the host for approval." },
-                  fr: { title: "Découvrez & candidatez", desc: "Parcourez les Jaiffersons publics ou recevez une invitation privée. Répondez aux questions d'onboarding de l'hôte. Votre candidature est transmise directement à l'hôte." },
-                },
-                {
-                  n: "02",
-                  en: { title: "Get accepted & attend", desc: "Once approved, you receive a confirmation email and a calendar invitation with the meeting link. Fireflies is already in the call. Just show up." },
-                  fr: { title: "Soyez accepté & participez", desc: "Une fois approuvé, vous recevez un email de confirmation et une invitation calendrier avec le lien. Fireflies est déjà dans l'appel. Soyez juste présent." },
-                },
-                {
-                  n: "03",
-                  en: { title: "Receive your private synthesis", desc: "Within 24 hours: a private report written only for you. Your presence in the room. Your psychological reading. Your one strategic move before the next Festin." },
-                  fr: { title: "Recevez votre synthèse privée", desc: "Sous 24h : un rapport privé écrit pour vous seul. Votre présence dans la salle. Votre lecture psychologique. Votre prochain mouvement stratégique." },
-                },
-              ].map((step) => (
-                <div key={step.n} className="flex gap-5">
-                  <span className="font-serif text-4xl text-foreground/10 leading-none shrink-0 w-10">
-                    {step.n}
-                  </span>
-                  <div>
-                    <h3 className="text-[14px] font-medium mb-1.5">
-                      {isFr ? step.fr.title : step.en.title}
-                    </h3>
-                    <p className="text-[13px] text-muted-foreground leading-relaxed">
-                      {isFr ? step.fr.desc : step.en.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FESTIN 00 RESULTS SHOWCASE ───────────────────────────────────── */}
-      <section className="bg-primary text-primary-foreground py-20 px-6">
-        <div className="max-w-[900px] mx-auto">
-          <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-gold/80 text-center mb-4">
-            {isFr ? "Résultats réels · Festin 00" : "Real results · Festin 00"}
-          </p>
-          <h2 className="font-serif text-[clamp(24px,3.5vw,38px)] text-center text-primary-foreground mb-4 leading-snug">
-            {isFr
-              ? "Le dîner des pirates de la tech française"
-              : "The dinner of French tech pirates"}
-          </h2>
-          <p className="text-center text-primary-foreground/60 text-[14px] mb-14 italic font-serif">
-            {isFr
-              ? "Organisé par Carlos · Paris · 7 participants · ~70 minutes"
-              : "Hosted by Carlos · Paris · 7 participants · ~70 minutes"}
-          </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {STATS.map((s, i) => (
-              <div key={i} className="text-center border border-primary-foreground/10 p-6">
-                <p className="font-serif text-[36px] leading-none text-gold mb-2">{s.value}</p>
-                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/50 leading-snug">
-                  {isFr ? s.labelFr : s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Sample insight */}
-          <div className="border border-primary-foreground/10 p-8 md:p-10">
-            <p className="text-[10px] tracking-[0.2em] uppercase text-gold/70 mb-6">
-              {isFr ? "Extrait · Rapport global Festin 00" : "Extract · Festin 00 global report"}
-            </p>
-            <blockquote className="font-serif italic text-[clamp(16px,2.5vw,22px)] leading-relaxed text-primary-foreground/90 mb-6">
-              {isFr
-                ? "\"Ce que la salle a évité de dire, c'est la question du retour. Chacun a construit quelque chose. Aucun n'a nommé ce qu'il a laissé derrière.\""
-                : "\"What the room avoided saying was the question of return. Each person had built something. None named what they left behind.\""}
-            </blockquote>
-            <p className="text-[12px] tracking-widest uppercase text-primary-foreground/30">
-              — Jaifferson · {isFr ? "Section : Ce qui n'a pas été dit" : "Section: What was not said"}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── UPCOMING FESTINS PREVIEW ─────────────────────────────────────── */}
-      <section className="px-6 py-24 max-w-[1000px] mx-auto">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-gold mb-3">
-              {isFr ? "Jaiffersons publics" : "Public Jaiffersons"}
-            </p>
-            <h2 className="font-serif text-[clamp(24px,3.5vw,38px)] leading-tight">
-              {isFr ? "Les prochaines tables." : "The next tables."}
-            </h2>
-          </div>
-          <button
-            onClick={() => navigate("/explore")}
-            className="hidden md:block text-[12px] tracking-widest uppercase text-muted-foreground hover:text-foreground border-b border-muted-foreground/30 hover:border-foreground transition-colors pb-0.5"
-          >
-            {isFr ? "Voir tout →" : "See all →"}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {FESTINS.map((f) => {
-            const status = STATUS_CONFIG[f.status];
-            return (
-              <div
-                key={f.id}
-                className={`border border-border p-7 flex flex-col gap-5 group cursor-pointer hover:border-foreground/40 transition-colors`}
-                onClick={() => {
-                  if (f.id === "festin-00") navigate("/festin");
-                  else if (f.status === "open") navigate("/create");
-                  else navigate(`/explore`);
-                }}
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between gap-3">
-                  <span className="font-serif text-5xl text-foreground/8 leading-none">
-                    {f.number}
-                  </span>
-                  <span className={`text-[10px] tracking-widest uppercase px-2.5 py-1 ${status.cls}`}>
-                    {isFr ? status.fr : status.en}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <div>
-                  <h3 className="font-serif text-[15px] leading-snug mb-1">
-                    {isFr ? f.titleFr : f.title}
-                  </h3>
-                  {f.host !== "—" && (
-                    <p className="text-[12px] text-muted-foreground">
-                      {isFr ? "Hôte" : "Host"}: {f.host} · {f.location}
-                    </p>
-                  )}
-                </div>
-
-                {/* Tags */}
-                {f.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {f.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] uppercase tracking-wide border border-border px-2 py-0.5 text-muted-foreground"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Participants bar */}
-                {f.status !== "open" && (
-                  <div>
-                    <div className="flex justify-between text-[11px] text-muted-foreground mb-1.5">
-                      <span>{isFr ? "Participants" : "Participants"}</span>
-                      <span>{f.participants}/{f.maxParticipants}</span>
-                    </div>
-                    <div className="h-0.5 bg-border w-full">
-                      <div
-                        className="h-0.5 bg-gold transition-all"
-                        style={{ width: `${(f.participants / f.maxParticipants) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Highlight / CTA */}
-                <p className="text-[11px] text-muted-foreground/70 italic border-t border-border pt-4 mt-auto leading-relaxed">
-                  {isFr ? f.highlightFr : f.highlight}
-                </p>
-
-                {f.status === "open" && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate("/create"); }}
-                    className="w-full border border-primary text-primary text-[12px] tracking-widest uppercase py-2.5 hover:bg-primary hover:text-primary-foreground transition-colors mt-1"
-                  >
-                    {isFr ? "Créer un Jaifferson" : "Create a Jaifferson"}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Mobile see all */}
-        <div className="flex justify-center mt-8 md:hidden">
-          <button
-            onClick={() => navigate("/explore")}
-            className="text-[12px] tracking-widest uppercase text-muted-foreground hover:text-foreground border-b border-muted-foreground/30 transition-colors"
-          >
-            {isFr ? "Voir tous les Jaiffersons →" : "See all Jaiffersons →"}
-          </button>
-        </div>
-      </section>
-
-      {/* ── QUOTE ────────────────────────────────────────────────────────── */}
-      <section className="bg-foreground text-background py-20 px-6 text-center">
-        <blockquote className="font-serif italic text-[clamp(18px,3vw,26px)] leading-relaxed max-w-[680px] mx-auto mb-6 opacity-90">
-          {isFr
-            ? "\"La plupart des conversations importent une fois. Jaifferson les fait compter dans le temps.\""
-            : "\"Most conversations matter once. Jaifferson makes them compound.\""}
-        </blockquote>
-        <p className="text-[12px] tracking-[0.15em] uppercase opacity-30">
-          — Jaifferson · {isFr ? "Curator-Stratège" : "Curator-Strategist"}
-        </p>
-      </section>
-
-      {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
-      <section className="px-6 py-24 text-center max-w-[600px] mx-auto">
-        <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-gold mb-6">
-          {isFr ? "Commencez" : "Begin"}
-        </p>
-        <h2 className="font-serif text-[clamp(26px,4vw,42px)] leading-tight mb-6">
-          {isFr
-            ? "Votre prochain appel mérite mieux qu'un bon souvenir."
-            : "Your next call deserves more than a good memory."}
-        </h2>
-        <p className="text-[15px] text-muted-foreground leading-relaxed mb-10">
-          {isFr
-            ? "Créez un Jaifferson en moins de 5 minutes. Jaifferson s'occupe du reste."
-            : "Create a Jaifferson in under 5 minutes. Jaifferson handles the rest."}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate("/create")}
-            className="bg-primary text-primary-foreground text-[13px] font-medium tracking-widest uppercase px-10 py-4 hover:bg-primary/90 transition-colors"
-          >
-            {isFr ? "Organiser un Jaifferson" : "Host a Jaifferson"}
-          </button>
-          <button
-            onClick={() => navigate("/explore")}
-            className="border border-border text-foreground text-[13px] font-medium tracking-widest uppercase px-10 py-4 hover:border-foreground transition-colors"
-          >
-            {isFr ? "Explorer les Jaiffersons" : "Explore Jaiffersons"}
-          </button>
-        </div>
-      </section>
-
-      {/* ── FOOTER ───────────────────────────────────────────────────────── */}
-      <footer className="border-t border-border px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-2 text-[13px] text-muted-foreground">
-        <span className="font-serif">Jaifferson</span>
-        <span className="text-[11px] tracking-widest uppercase text-muted-foreground/50">
-          {isFr ? "L'intelligence dans la salle" : "The intelligence in the room"}
-        </span>
-        <a
-          href="https://www.linkedin.com/in/quentincloarec/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
+      {step !== null && (
+        <div
+          ref={overlayRef}
+          onClick={(e) => e.target === overlayRef.current && closeModal()}
+          className="fixed inset-0 z-50 bg-[hsl(211_56%_5%/0.78)] backdrop-blur-md flex items-center justify-center p-5"
         >
-          {isFr ? "Par Quentin Cloarec" : "By Quentin Cloarec"}
-        </a>
-      </footer>
+          <div className="bg-[hsl(var(--background-2))] border border-line rounded-[20px] max-w-[480px] w-full p-9 text-center relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-5 right-6 text-muted-foreground hover:text-foreground"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {step === "email" && (
+              <>
+                <h2 className="font-display font-semibold text-[28px] tracking-[-0.02em] mb-3">
+                  Profile ready.
+                </h2>
+                <p className="text-muted-foreground mb-6 leading-[1.5]">
+                  We found enough public signal to decode this target. Drop your email and we'll deliver the full
+                  8-section report to your inbox.
+                </p>
+                <form onSubmit={submitEmail}>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    className="w-full bg-black/25 border border-line text-foreground rounded-xl px-[18px] py-4 text-base outline-none focus:border-gold focus:bg-black/35 transition-colors placeholder:text-[hsl(var(--muted-foreground)/0.55)] mb-3"
+                  />
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-gold text-primary-foreground rounded-xl px-7 py-4 text-base font-semibold hover:bg-gold-soft transition-colors disabled:opacity-60"
+                  >
+                    {submitting ? "Sending..." : "Send me the full profile →"}
+                  </button>
+                </form>
+                <p className="text-xs text-muted-foreground mt-4 text-left leading-[1.5]">
+                  By submitting you confirm the subject's information is publicly available and that you'll use the
+                  report for lawful professional purposes. See our{" "}
+                  <button onClick={() => { setView("terms"); closeModal(); }} className="text-gold hover:text-gold-soft">
+                    Terms
+                  </button>{" "}
+                  and{" "}
+                  <button onClick={() => { setView("privacy"); closeModal(); }} className="text-gold hover:text-gold-soft">
+                    Privacy Policy
+                  </button>
+                  .
+                </p>
+              </>
+            )}
+
+            {step === "success" && (
+              <>
+                <div className="w-14 h-14 rounded-full bg-gold text-primary-foreground flex items-center justify-center mx-auto mb-5">
+                  <Check className="w-7 h-7" />
+                </div>
+                <h2 className="font-display font-semibold text-[28px] tracking-[-0.02em] mb-3">
+                  Check your inbox.
+                </h2>
+                <p className="text-muted-foreground mb-6 leading-[1.5]">
+                  Your target profile is being generated and will land in your inbox within a few minutes.
+                </p>
+                <button
+                  onClick={closeModal}
+                  className="w-full border border-line text-foreground rounded-xl px-7 py-4 text-base font-semibold hover:border-gold hover:text-gold-soft transition-colors"
+                >
+                  Decode another
+                </button>
+              </>
+            )}
+
+            {step === "not-enough" && (
+              <>
+                <div className="w-14 h-14 rounded-full bg-[hsl(var(--gold)/0.15)] border border-gold text-gold flex items-center justify-center mx-auto mb-5">
+                  <AlertCircle className="w-7 h-7" />
+                </div>
+                <h2 className="font-display font-semibold text-[28px] tracking-[-0.02em] mb-3">
+                  Not enough public signal.
+                </h2>
+                <p className="text-muted-foreground mb-6 leading-[1.5]">
+                  This profile doesn't have enough publicly available information for us to produce a credible report.
+                  Try a more active profile, or paste additional context (articles, interviews) on the next step.
+                </p>
+                <button
+                  onClick={closeModal}
+                  className="w-full border border-line text-foreground rounded-xl px-7 py-4 text-base font-semibold hover:border-gold hover:text-gold-soft transition-colors"
+                >
+                  Try another link
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+const FAQ = [
+  {
+    q: "Is this based on private data?",
+    a: 'No. Cloarec.ai only analyses <strong class="text-foreground font-medium">publicly available information</strong> — what appears on the public LinkedIn or X profile, plus what\'s indexed on the open web (interviews, articles, podcasts, public posts). We do not access private messages, connections, emails, or anything behind a login.',
+  },
+  {
+    q: "What happens if there's not enough public info?",
+    a: "We only deliver a report when we have enough signal to produce a credible profile. If the public footprint is too thin (private profile, minimal activity, no press coverage), we'll tell you — and you won't receive a report. No half-baked output.",
+  },
+  {
+    q: "How accurate are the psychological and MBTI sections?",
+    a: 'They are <strong class="text-foreground font-medium">hypotheses</strong>, not diagnoses. Built on observed patterns in public behaviour, language, and career choices. Treat them as strategic working hypotheses to refine on first contact — not verdicts.',
+  },
+  {
+    q: "Is this legal and GDPR-compliant?",
+    a: "Yes. We process only publicly available personal data under a legitimate-interest basis (GDPR Art. 6(1)(f)) for the user conducting lawful outreach or research. Any subject may request access, correction, or deletion of data we hold on them.",
+  },
+  {
+    q: "Can I profile someone who is a private individual?",
+    a: "Cloarec.ai is designed for professional research — prospects, candidates, partners, investors, public figures. We discourage using it on private individuals with no public-facing professional presence, and we reserve the right to refuse any request.",
+  },
+  {
+    q: "Do you store the profiles I generate?",
+    a: "We store them linked to your account so you can retrieve them later. You can delete any profile from your dashboard.",
+  },
+  {
+    q: "How long does it take?",
+    a: "Usually under 90 seconds for a standard profile. Complex subjects with heavy press coverage can take up to 3 minutes. You'll receive the full report by email.",
+  },
+  {
+    q: "Can the person I profile find out?",
+    a: "No. We never contact the subject. Generating a profile leaves no trace on their LinkedIn or X account — we don't visit logged-in pages or interact with their profile in any way.",
+  },
+];
+
+const Legal = ({
+  title,
+  updated,
+  onBack,
+  children,
+}: {
+  title: string;
+  updated: string;
+  onBack: () => void;
+  children: React.ReactNode;
+}) => (
+  <div className="max-w-[760px]">
+    <button
+      onClick={onBack}
+      className="inline-flex items-center gap-1.5 text-gold hover:text-gold-soft text-sm mb-6"
+    >
+      ← Back
+    </button>
+    <h1 className="font-display text-[42px] tracking-[-0.02em] mb-2">{title}</h1>
+    <p className="text-muted-foreground text-[13px] mb-8">Last updated: {updated}</p>
+    <div className="[&>h2]:font-display [&>h2]:font-semibold [&>h2]:text-[22px] [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:text-gold-soft [&>p]:text-muted-foreground [&>p]:leading-[1.7] [&>p]:text-[15px] [&>p]:mb-3 [&>ul]:pl-[22px] [&>ul]:mb-3 [&>ul]:list-disc [&>ul>li]:text-muted-foreground [&>ul>li]:leading-[1.7] [&>ul>li]:text-[15px] [&>ul>li]:mb-3 [&_strong]:text-foreground [&_strong]:font-medium">
+      {children}
+    </div>
+  </div>
+);
 
 export default Index;
