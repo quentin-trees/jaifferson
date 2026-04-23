@@ -283,7 +283,7 @@ const Index = () => {
         )}
 
         <footer className="mt-24 pt-7 border-t border-line flex flex-wrap justify-between gap-4 text-[13px] text-muted-foreground">
-          <div>© 2026 Cloarec.ai — The Cloarec way</div>
+          <div>© 2026 Cloarec.ai — The Jaifferson way</div>
           <div className="flex gap-5">
             <button onClick={() => setView("terms")} className="hover:text-gold-soft transition-colors">
               Terms
