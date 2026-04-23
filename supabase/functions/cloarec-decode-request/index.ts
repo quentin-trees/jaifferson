@@ -45,13 +45,13 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Persist as a waitlist signup so we have a record
-    await supabase.from("waitlist_signups").insert({
+    // Persist the lead
+    const { error: insertError } = await supabase.from("cloarec_leads").insert({
       email,
-      first_name: "Cloarec lead",
-      intent: "decode-profile",
-      topic: url,
+      target_url: url,
+      status: "pending",
     });
+    if (insertError) console.error("Insert error", insertError);
 
     // Notify Quentin + Skai
     await sendEmail(

@@ -5,16 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import Index from "./pages/Index";
-import Create from "./pages/Create";
-import Explore from "./pages/Explore";
-import Dashboard from "./pages/Dashboard";
-import Auth from "./pages/Auth";
-import Session from "./pages/Session";
-import Onboard from "./pages/Onboard";
-import Admin from "./pages/Admin";
-import Story from "./pages/Story";
-import Festin from "./pages/Festin";
-import Unsubscribe from "./pages/Unsubscribe";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,16 +18,6 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/session/:id" element={<Session />} />
-            <Route path="/onboard" element={<Onboard />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/story" element={<Story />} />
-            <Route path="/festin" element={<Festin />} />
-            <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
