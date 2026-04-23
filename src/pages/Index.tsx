@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { X, Check, AlertCircle, Linkedin } from "lucide-react";
+import { X, Check, AlertCircle, Linkedin, Menu, ArrowRight } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type View = "home" | "terms" | "privacy";
 type ModalStep = "email" | "success" | "not-enough" | null;
