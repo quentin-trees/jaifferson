@@ -4,68 +4,75 @@
 
 @layer base {
   :root {
-    --background: 40 33% 96%;
-    --foreground: 0 0% 10%;
+    /* Cloarec.ai — deep navy + gold */
+    --background: 211 56% 11%;
+    --background-2: 211 56% 14%;
+    --foreground: 36 56% 92%;
 
-    --card: 40 33% 96%;
-    --card-foreground: 0 0% 10%;
+    --card: 211 56% 14%;
+    --card-foreground: 36 56% 92%;
 
-    --popover: 40 33% 96%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 211 56% 14%;
+    --popover-foreground: 36 56% 92%;
 
-    --primary: 211 52% 23%;
-    --primary-foreground: 40 33% 96%;
+    --primary: 39 49% 58%;
+    --primary-foreground: 211 56% 11%;
 
-    --secondary: 37 14% 87%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 211 56% 14%;
+    --secondary-foreground: 36 56% 92%;
 
-    --muted: 37 14% 87%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 211 30% 22%;
+    --muted-foreground: 36 27% 71%;
 
-    --accent: 37 14% 87%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 39 65% 73%;
+    --accent-foreground: 211 56% 11%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 40 33% 96%;
+    --destructive-foreground: 36 56% 92%;
 
-    --border: 37 14% 87%;
-    --input: 37 14% 87%;
-    --ring: 211 52% 23%;
-    --gold: 43 52% 54%;
-    --gold-foreground: 40 33% 96%;
+    --border: 39 49% 58%;
+    --input: 211 56% 18%;
+    --ring: 39 49% 58%;
 
-    --radius: 0px;
+    /* Brand tokens */
+    --gold: 39 49% 58%;
+    --gold-foreground: 211 56% 11%;
+    --gold-soft: 39 65% 73%;
 
-    --sidebar-background: 40 33% 96%;
-    --sidebar-foreground: 0 0% 10%;
-    --sidebar-primary: 211 52% 23%;
-    --sidebar-primary-foreground: 40 33% 96%;
-    --sidebar-accent: 37 14% 87%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 37 14% 87%;
-    --sidebar-ring: 211 52% 23%;
+    --line: 39 49% 58%;
+
+    --radius: 12px;
+
+    --sidebar-background: 211 56% 11%;
+    --sidebar-foreground: 36 56% 92%;
+    --sidebar-primary: 39 49% 58%;
+    --sidebar-primary-foreground: 211 56% 11%;
+    --sidebar-accent: 211 56% 14%;
+    --sidebar-accent-foreground: 36 56% 92%;
+    --sidebar-border: 211 30% 22%;
+    --sidebar-ring: 39 49% 58%;
   }
 
   .dark {
-    --background: 0 0% 10%;
-    --foreground: 40 33% 96%;
-    --card: 0 0% 10%;
-    --card-foreground: 40 33% 96%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 40 33% 96%;
-    --primary: 40 33% 96%;
-    --primary-foreground: 211 52% 23%;
-    --secondary: 0 0% 18%;
-    --secondary-foreground: 40 33% 96%;
-    --muted: 0 0% 18%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 18%;
-    --accent-foreground: 40 33% 96%;
+    --background: 211 56% 11%;
+    --foreground: 36 56% 92%;
+    --card: 211 56% 14%;
+    --card-foreground: 36 56% 92%;
+    --popover: 211 56% 14%;
+    --popover-foreground: 36 56% 92%;
+    --primary: 39 49% 58%;
+    --primary-foreground: 211 56% 11%;
+    --secondary: 211 56% 14%;
+    --secondary-foreground: 36 56% 92%;
+    --muted: 211 30% 22%;
+    --muted-foreground: 36 27% 71%;
+    --accent: 39 65% 73%;
+    --accent-foreground: 211 56% 11%;
     --destructive: 0 63% 31%;
-    --destructive-foreground: 40 33% 96%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 40 33% 96%;
+    --destructive-foreground: 36 56% 92%;
+    --border: 211 30% 22%;
+    --input: 211 56% 18%;
+    --ring: 39 49% 58%;
   }
 }
 
@@ -75,10 +82,23 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 85% -10%, hsl(var(--gold) / 0.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, hsl(var(--gold) / 0.10), transparent 60%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', 'Playfair Display', serif;
   }
+}
+
+@layer utilities {
+  .border-line { border-color: hsl(var(--gold) / 0.25); }
+  .text-gold { color: hsl(var(--gold)); }
+  .text-gold-soft { color: hsl(var(--gold-soft)); }
+  .bg-gold { background-color: hsl(var(--gold)); }
+  .font-display { font-family: 'Fraunces', 'Playfair Display', serif; }
 }
