@@ -68,11 +68,12 @@ serve(async (req) => {
     // Acknowledge the user
     await sendEmail(
       [email],
-      "Your Cloarec.ai profile is being prepared",
+      "Your profile is being prepared",
       `<div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#0b1a2b;color:#f4ece0;border-radius:16px">
         <h2 style="font-family:Georgia,serif;color:#e8c98a;margin:0 0 16px">Profile incoming.</h2>
         <p style="line-height:1.6">We received your request to decode:<br/><a href="${url}" style="color:#c9a35f">${url}</a></p>
-        <p style="line-height:1.6">Quentin will review the public footprint and send you the full 8-section strategic profile shortly.</p>
+        <p style="line-height:1.6">Your full 8-section strategic profile will arrive soon. The automation is being finalized — thank you for your patience.</p>
+        <p style="line-height:1.6">Questions? Contact Eric at <a href="mailto:skai@mafia.email" style="color:#c9a35f">skai@mafia.email</a></p>
         <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— The Jaifferson way</p>
       </div>`
     );
