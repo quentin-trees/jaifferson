@@ -6,30 +6,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const FROM = "Cloarec.ai <hello@cloarec.ai>";
-const NOTIFY = ["quentin@cloarec.ai", "skai@mafia.email"];
-
-async function sendEmail(to: string[], subject: string, html: string) {
-  if (!RESEND_API_KEY) {
-    console.warn("RESEND_API_KEY missing — skipping email");
-    return;
-  }
-  const r = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ from: FROM, to, subject, html }),
-  });
-  if (!r.ok) {
-    console.error("Resend error", await r.text());
-  }
-}
-
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
 
   try {
     const { url, email } = await req.json();
@@ -40,45 +20,76 @@ serve(async (req) => {
       });
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
 
-    // Persist the lead
-    const { error: insertError } = await supabase.from("cloarec_leads").insert({
-      email,
-      target_url: url,
-      status: "pending",
-    });
-    if (insertError) console.error("Insert error", insertError);
+    if (!supabaseUrl || !supabaseServiceRoleKey || !supabaseAnonKey) {
+      return new Response(JSON.stringify({ error: "Server configuration error" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-    // Notify Quentin + Skai
-    await sendEmail(
-      NOTIFY,
-      `New Cloarec.ai decode request — ${email}`,
-      `<div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#0b1a2b;color:#f4ece0;border-radius:16px">
-        <h2 style="font-family:Georgia,serif;color:#e8c98a;margin:0 0 16px">New decode request</h2>
-        <p style="margin:0 0 8px"><strong>Email:</strong> ${email}</p>
-        <p style="margin:0 0 8px"><strong>Target URL:</strong> <a href="${url}" style="color:#c9a35f">${url}</a></p>
-        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— Cloarec.ai</p>
-      </div>`
-    );
+    const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-    // Acknowledge the user
-    await sendEmail(
-      [email],
-      "Your profile is being prepared",
-      `<div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#0b1a2b;color:#f4ece0;border-radius:16px">
-        <h2 style="font-family:Georgia,serif;color:#e8c98a;margin:0 0 16px">Profile incoming.</h2>
-        <p style="line-height:1.6">We received your request to decode:<br/><a href="${url}" style="color:#c9a35f">${url}</a></p>
-        <p style="line-height:1.6">Your full 8-section strategic profile will arrive soon. The automation is being finalized — thank you for your patience.</p>
-        <p style="line-height:1.6">Questions? Reach out at <a href="mailto:hello@cloarec.ai" style="color:#c9a35f">hello@cloarec.ai</a></p>
-        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— Cloarec.ai</p>
-      </div>`
-    );
+    const { data: lead, error: insertError } = await supabase
+      .from("cloarec_leads")
+      .insert({
+        email,
+        target_url: url,
+        status: "pending",
+      })
+      .select("id")
+      .single();
 
-    return new Response(JSON.stringify({ ok: true }), {
+    if (insertError || !lead) {
+      console.error("Insert error", insertError);
+      return new Response(JSON.stringify({ error: "Failed to save request" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const functionClient = createClient(supabaseUrl, supabaseAnonKey);
+
+    const [notifyResult, requesterResult] = await Promise.allSettled([
+      functionClient.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "decode-request-notification",
+          idempotencyKey: `decode-notify-${lead.id}`,
+          templateData: {
+            requesterEmail: email,
+            targetUrl: url,
+          },
+        },
+      }),
+      functionClient.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "decode-request-received",
+          recipientEmail: email,
+          idempotencyKey: `decode-received-${lead.id}`,
+          templateData: {
+            requesterEmail: email,
+            targetUrl: url,
+          },
+        },
+      }),
+    ]);
+
+    if (notifyResult.status === "rejected") {
+      console.error("Notification email invoke failed", notifyResult.reason);
+    } else if (notifyResult.value.error) {
+      console.error("Notification email error", notifyResult.value.error);
+    }
+
+    if (requesterResult.status === "rejected") {
+      console.error("Requester email invoke failed", requesterResult.reason);
+    } else if (requesterResult.value.error) {
+      console.error("Requester email error", requesterResult.value.error);
+    }
+
+    return new Response(JSON.stringify({ ok: true, leadId: lead.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
