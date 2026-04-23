@@ -73,7 +73,7 @@ serve(async (req) => {
         <h2 style="font-family:Georgia,serif;color:#e8c98a;margin:0 0 16px">Profile incoming.</h2>
         <p style="line-height:1.6">We received your request to decode:<br/><a href="${url}" style="color:#c9a35f">${url}</a></p>
         <p style="line-height:1.6">Quentin will review the public footprint and send you the full 8-section strategic profile shortly.</p>
-        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— The Cloarec way</p>
+        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— The Jaifferson way</p>
       </div>`
     );
 
