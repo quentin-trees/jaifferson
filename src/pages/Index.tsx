@@ -100,7 +100,7 @@ const Index = () => {
               </h1>
               <p className="text-[19px] leading-[1.55] text-muted-foreground max-w-[640px] mb-5">
                 Paste a LinkedIn or X link. Get a deep strategic profile — identity, values, MBTI hypothesis,
-                blue ocean, and how to approach them. The Cloarec way.
+                blue ocean, and how to approach them. The Jaifferson way.
               </p>
               <div className="inline-flex items-center gap-2 text-[13px] text-gold-soft bg-[hsl(var(--gold)/0.08)] border border-line rounded-full px-3.5 py-2 mb-10">
                 <span className="w-2 h-2 rounded-full bg-gold shadow-[0_0_10px_hsl(var(--gold))]" />
