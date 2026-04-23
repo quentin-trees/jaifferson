@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { X, Check, AlertCircle, Linkedin } from "lucide-react";
@@ -76,6 +77,9 @@ const Index = () => {
             <button onClick={() => scrollToId("faq")} className="hover:text-foreground transition-colors">
               FAQ
             </button>
+            <Link to="/examples" className="hover:text-foreground transition-colors">
+              Examples
+            </Link>
             <a
               href="https://www.linkedin.com/in/quentincloarec/"
               target="_blank"
