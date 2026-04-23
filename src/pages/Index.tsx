@@ -143,6 +143,19 @@ const Index = () => {
                 Paste a LinkedIn or X link. Get a deep strategic profile — identity, values, MBTI hypothesis,
                 blue ocean, and how to approach them. The Jaifferson way.
               </p>
+              
+              {/* CTA Examples */}
+              <Link
+                to="/examples"
+                className="inline-flex items-center gap-2 text-[14px] font-medium text-gold hover:text-gold-soft transition-colors mb-6 group"
+              >
+                <span className="inline-flex items-center gap-2 border border-gold/30 rounded-full px-4 py-2 group-hover:border-gold/50 transition-colors">
+                  <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+                  See 5 sample dossiers
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+
               <div className="inline-flex items-center gap-2 text-[13px] text-gold-soft bg-[hsl(var(--gold)/0.08)] border border-line rounded-full px-3.5 py-2 mb-10">
                 <span className="w-2 h-2 rounded-full bg-gold shadow-[0_0_10px_hsl(var(--gold))]" />
                 100% based on publicly available information
