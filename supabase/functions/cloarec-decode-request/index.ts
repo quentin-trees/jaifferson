@@ -73,8 +73,8 @@ serve(async (req) => {
         <h2 style="font-family:Georgia,serif;color:#e8c98a;margin:0 0 16px">Profile incoming.</h2>
         <p style="line-height:1.6">We received your request to decode:<br/><a href="${url}" style="color:#c9a35f">${url}</a></p>
         <p style="line-height:1.6">Your full 8-section strategic profile will arrive soon. The automation is being finalized — thank you for your patience.</p>
-        <p style="line-height:1.6">Questions? Contact Eric at <a href="mailto:skai@mafia.email" style="color:#c9a35f">skai@mafia.email</a></p>
-        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— The Jaifferson way</p>
+        <p style="line-height:1.6">Questions? Reach out at <a href="mailto:hello@cloarec.ai" style="color:#c9a35f">hello@cloarec.ai</a></p>
+        <p style="margin:24px 0 0;font-size:12px;color:#b9a98c">— Cloarec.ai</p>
       </div>`
     );
 
