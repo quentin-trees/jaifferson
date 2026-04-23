@@ -148,10 +148,12 @@ const Meta = ({ label, value }: { label: string; value: string }) => (
 export const Section = ({
   number,
   title,
+  subtitle,
   children,
 }: {
   number: string;
   title: string;
+  subtitle?: string;
   children: ReactNode;
 }) => (
   <section className="py-14 border-t" style={{ borderColor: "#17140f22" }}>
@@ -174,6 +176,14 @@ export const Section = ({
         >
           {title}
         </h2>
+        {subtitle && (
+          <div
+            className="mt-3 text-[11px] tracking-[0.18em] uppercase"
+            style={{ color: "#6b6355", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
+          >
+            {subtitle}
+          </div>
+        )}
       </div>
       <div className="col-span-12 md:col-span-9 md:pl-6">{children}</div>
     </div>
@@ -217,22 +227,22 @@ export const Pullquote = ({ children }: { children: ReactNode }) => (
   </blockquote>
 );
 
-export const Placeholder = () => (
+export const Placeholder = ({ note }: { note?: string } = {}) => (
   <div
     className="mt-6 p-6 border border-dashed"
     style={{ borderColor: "#17140f44" }}
   >
     <div
       className="text-[10px] tracking-[0.22em] uppercase mb-2"
-      style={{ color: "#6b6355", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
+      style={{ color: "#ff5b22", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
     >
-      Awaiting source · .md
+      Awaiting source
     </div>
     <div
-      className="text-[14px]"
-      style={{ color: "#6b6355", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
+      className="text-[14px] leading-[1.6]"
+      style={{ color: "#2a241c", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
     >
-      Send the markdown for this subject — it will be inlaid here in the next cut.
+      {note ?? "Section reserved. The reconstructed dossier will be inlaid here once the source markdown is dropped in."}
     </div>
   </div>
 );
