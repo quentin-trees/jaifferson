@@ -15,3 +15,5 @@ project_id = "cwslhulthqyizsalrist"
     verify_jwt = false
   [functions.handle-email-suppression]
     verify_jwt = false
+  [functions.cloarec-decode-request]
+    verify_jwt = false
