@@ -14,7 +14,7 @@ import type { ExampleSubject } from "@/data/examples";
  */
 export const DossierLayout = ({
   subject,
-  issue = "TREES · INTEL · 04·2026",
+  issue = "Cloarec · Intel · Rev 02 · 04·2026",
   children,
 }: {
   subject: ExampleSubject;
@@ -58,7 +58,7 @@ export const DossierLayout = ({
               className="text-[12px] tracking-[0.22em] uppercase mb-6"
               style={{ color: "#6b6355", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
             >
-              Dossier · {subject.shortName} · Trees Intel
+              Dossier · {subject.shortName} · Cloarec Intel
             </div>
             <h1
               className="leading-[0.85]"
