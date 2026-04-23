@@ -141,7 +141,7 @@ const Index = () => {
               </h1>
               <p className="text-[19px] leading-[1.55] text-muted-foreground max-w-[640px] mb-5">
                 Paste a LinkedIn or X link. Get a deep strategic profile — identity, values, MBTI hypothesis,
-                blue ocean, and how to approach them. The Jaifferson way.
+                blue ocean, and how to approach them.
               </p>
               
               {/* CTA Examples */}
@@ -337,7 +337,7 @@ const Index = () => {
         )}
 
         <footer className="mt-24 pt-7 border-t border-line flex flex-wrap justify-between gap-4 text-[13px] text-muted-foreground">
-          <div>© 2026 Cloarec.ai — The Jaifferson way</div>
+          <div>© 2026 Cloarec.ai — by Quentin Cloarec</div>
           <div className="flex gap-5">
             <button onClick={() => setView("terms")} className="hover:text-gold-soft transition-colors">
               Terms
