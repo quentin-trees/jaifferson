@@ -1,6 +1,48 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { examples } from "@/data/examples";
+
+const examples = [
+  {
+    slug: "oussama-ammar",
+    initial: "O",
+    name: "Oussama Ammar",
+    role: "Entrepreneur / The Family",
+    location: "Paris, France",
+    status: "published",
+  },
+  {
+    slug: "david-lisnard",
+    initial: "D",
+    name: "David Lisnard",
+    role: "Maire de Cannes",
+    location: "Cannes, France",
+    status: "awaiting",
+  },
+  {
+    slug: "emmanuel-macron",
+    initial: "E",
+    name: "Emmanuel Macron",
+    role: "Président de la République",
+    location: "Paris, France",
+    status: "awaiting",
+  },
+  {
+    slug: "elon-musk",
+    initial: "E",
+    name: "Elon Musk",
+    role: "CEO Tesla, SpaceX, X",
+    location: "Austin, USA",
+    status: "awaiting",
+  },
+  {
+    slug: "naval-ravikant",
+    initial: "N",
+    name: "Naval Ravikant",
+    role: "Investor / AngelList",
+    location: "San Francisco, USA",
+    status: "awaiting",
+  },
+];
 
 const Examples = () => {
   return (
