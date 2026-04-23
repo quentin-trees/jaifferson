@@ -68,6 +68,8 @@ const Index = () => {
           >
             cloarec<span className="text-gold">.ai</span>
           </button>
+          
+          {/* Desktop nav */}
           <div className="hidden md:flex gap-7 text-sm text-muted-foreground items-center">
             <button onClick={() => scrollToId("how")} className="hover:text-foreground transition-colors">
               How it works
@@ -78,7 +80,7 @@ const Index = () => {
             <button onClick={() => scrollToId("faq")} className="hover:text-foreground transition-colors">
               FAQ
             </button>
-            <Link to="/examples" className="hover:text-foreground transition-colors">
+            <Link to="/examples" className="text-gold hover:text-gold-soft transition-colors font-medium">
               Examples
             </Link>
             <a
@@ -91,6 +93,40 @@ const Index = () => {
               LinkedIn
             </a>
           </div>
+
+          {/* Mobile menu */}
+          <Sheet>
+            <SheetTrigger asChild className="md:hidden">
+              <button className="p-2 -mr-2 text-muted-foreground hover:text-foreground">
+                <Menu className="w-5 h-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] bg-[hsl(var(--background-2))] border-l border-line">
+              <div className="flex flex-col gap-6 pt-8">
+                <Link to="/" className="font-display font-extrabold text-xl tracking-tight">
+                  cloarec<span className="text-gold">.ai</span>
+                </Link>
+                <div className="h-px bg-line" />
+                <div className="flex flex-col gap-4 text-sm">
+                  <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Home
+                  </Link>
+                  <Link to="/examples" className="text-gold font-medium">
+                    Examples
+                  </Link>
+                  <a
+                    href="https://www.linkedin.com/in/quentincloarec/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Linkedin className="w-3.5 h-3.5" />
+                    LinkedIn
+                  </a>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </nav>
 
         {view === "home" && (
